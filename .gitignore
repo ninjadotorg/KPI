@@ -102,3 +102,63 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+# vim
+*~
+*.swp
+# mac fucking
+.DS_Store
+# vscode editor
+.vscode
+# pycharm editor
+.idea
+# python compile file
+*.pyc
+
+# restapi ignore
+restapi/.env
+restapi/app/settings.cfg
+restapi/app/settings.py
+restapi/app/bl/chain-info.json
+master-accounts.json
+.pytest_cache
+__pycache__
+redeem.txt
+
+# event ignore
+event/vendor
+event/config/*.yaml
+event/config/*.json
+event/vendor
+event/logs/*.txt
+
+# node-bl ignore
+nodebl/vendor
+nodebl/config/*.yaml
+nodebl/config/*.json
+nodebl/vendor
+nodebl/logs
+nodebl/config-local.js
+
+#event-new ignore
+node_modules
+.sonarlint
+dist
+config-local.js
+config-staging.js
+config-production.js
+
+# log
+debug.log
+
+# virtualenv
+.Python
+bin/
+include/
+lib/
+app/files/temp/
+pip-selfcheck.json
+
+# pdf
+*.pdf

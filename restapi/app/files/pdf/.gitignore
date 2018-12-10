@@ -1,0 +1,26 @@
+# mac fucking
+.DS_Store
+# vscode editor
+.vscode
+# pycharm editor
+.idea
+# python compile file
+*.pyc
+
+# restapi ignore
+restapi/.env
+restapi/app/settings.cfg
+
+# event ignore
+event/node_modules
+event/configs/config-local.js
+
+# virtualenv
+.Python
+bin/
+include/
+lib/
+pip-selfcheck.json
+
+# pdf
+*.pdf
