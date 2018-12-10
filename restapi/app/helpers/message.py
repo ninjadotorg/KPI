@@ -35,6 +35,7 @@ class MESSAGE(object):
 
 	# USER
 	USER_INVALID_EMAIL = 'Please enter a valid email address.'
+	USER_INVALID_PASSWORD = 'Please enter a valid password (length > 3).'
 	USER_CANNOT_REGISTRY = 'Sorry, we were unable to register you. Please contact human@autonomous.ai for support.'
 	USER_INVALID = 'Invalid user'
 	USER_NEED_PURCHASE_PRODUCT = 'Please purchase to sign more.'
@@ -42,6 +43,7 @@ class MESSAGE(object):
 	USER_INVALID_SOURCE = 'Please login with google+ or facebook account.'
 	USER_RECEIVED_FREE_BET_ALREADY = 'You have received free bet already!'
 	USER_CANNOT_RECEIVE_VERIFICATION_CODE = 'Your input email cannot receive verification code'
+	USER_EMAIL_EXIST_ALREADY = 'Email has been register already!'
 
 	# HANDSHAKE
 	HANDSHAKE_NOT_ENOUGH_GAS = 'You\'re out of gas! Please wait while we add ETH to your account.'
@@ -133,14 +135,16 @@ class CODE(object):
 	MATCH_HAS_BEEN_REVIEWED = '1061'	
 
 	# USER
-	USER_INVALID_EMAIL = '1014'												
+	USER_INVALID_EMAIL = '1014'	
+	USER_INVALID_PASSWORD = '1069'											
 	USER_CANNOT_REGISTRY = '1015' 											
 	USER_INVALID = '1016'													
 	USER_NEED_PURCHASE_PRODUCT = '1017'										
 	USER_INVALID_ACCESS_TOKEN = '1018' 										
 	USER_INVALID_SOURCE = '1019' 											
 	USER_RECEIVED_FREE_BET_ALREADY = '1020' 	
-	USER_CANNOT_RECEIVE_VERIFICATION_CODE = '1068'							
+	USER_CANNOT_RECEIVE_VERIFICATION_CODE = '1068'
+	USER_EMAIL_EXIST_ALREADY = '1070'							
 
 	# HANDSHAKE
 	HANDSHAKE_NOT_ENOUGH_GAS = '1021'	
