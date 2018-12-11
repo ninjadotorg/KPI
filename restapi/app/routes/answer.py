@@ -5,17 +5,18 @@ import hashlib
 import json
 import app.constants as CONST
 import logging
+import app.bl.answer as answer_bl
 
 from flask import Blueprint, request, g
 from app import db
 from datetime import datetime
 from sqlalchemy import and_, func
 
-from app.models import Rating
+from app.models import Rating, Comment, User
 from app.helpers.message import MESSAGE, CODE
 from app.helpers.decorators import admin_required, dev_required
 from app.helpers.response import response_ok, response_error
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 answer_routes = Blueprint('answer', __name__)
@@ -26,6 +27,11 @@ logfile = logging.getLogger('file')
 @jwt_required
 def submit_answer():
 	try:
+		current_user = get_jwt_identity()
+		user = db.session.query(User).filter(User.email==func.binary(current_user)).first()
+		if user is None:
+			return response_error(MESSAGE.USER_INVALID_EMAIL, CODE.USER_INVALID_EMAIL)
+		
 		data = request.json
 		if data is None:
 			return response_error(MESSAGE.INVALID_DATA, CODE.INVALID_DATA)
@@ -37,23 +43,31 @@ def submit_answer():
 			object_id == -1:
 			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
 
+		result = answer_bl.is_valid_object_id(review_type, object_id)
+		if result is False:
+			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
+
 		ratings = data['ratings']
 		if ratings is not None:
 			for r in ratings:
-				if 'question_id' not in r:
-					return response_error(MESSAGE.ANSWER_INVALID_QUESTION_ID, CODE.ANSWER_INVALID_QUESTION_ID)
-
 				r = Rating(
 					point=r['rating'],
 					question_id=r['question_id'],
-					object_id=object_id
+					object_id=object_id,
+					user_id=user.id
 				)
 				db.session.add(r)
 				db.session.flush()
 
 		comment = data['comment']
 		if comment is not None:
-			pass
+			c = Comment(
+				desc=comment,
+				user_id=user.id,
+				object_id=object_id
+			)
+			db.session.add(c)
+			db.session.flush()
 
 		return response_ok()
 	except Exception, ex:
@@ -64,6 +78,17 @@ def submit_answer():
 @jwt_required
 def view_answer():
 	try:
+		review_type = request.args.get('type', '')
+		object_id = request.args.get('id', -1)
+		
+		if len(review_type) == 0 or \
+			object_id == -1:
+			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
+
+		result = answer_bl.is_valid_object_id(review_type, object_id)
+		if result is False:
+			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
+
 		return response_ok()
 	except Exception, ex:
 		return response_error(ex.message)

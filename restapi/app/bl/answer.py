@@ -14,17 +14,17 @@ def is_valid_object_id(review_type, object_id):
 		return False
 
 	result = None
-	if review_type == Type['people']:
-		result = db.session.query(User).filter(User.id==object_id).first()
+	if review_type == Type['People']:
+		result = db.session.query(User).filter(User.id==object_id, User.type_id==rt.id).first()
 
-	elif review_type == Type['project']:
-		result = db.session.query(Project).filter(Project.id==object_id).first()
+	elif review_type == Type['Project']:
+		result = db.session.query(Project).filter(Project.id==object_id, Project.type_id==rt.id).first()
 
-	elif review_type == Type['team']:
-		result = db.session.query(Team).filter(Team.id==object_id).first()
+	elif review_type == Type['Team']:
+		result = db.session.query(Team).filter(Team.id==object_id, Team.type_id==rt.id).first()
 
-	elif review_type == Type['company']:
-		result = db.session.query(Company).filter(Company.id==object_id).first()
+	elif review_type == Type['Company']:
+		result = db.session.query(Company).filter(Company.id==object_id, Company.type_id==rt.id).first()
 
 	if result is None:
 		return False

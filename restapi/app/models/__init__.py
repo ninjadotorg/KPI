@@ -5,4 +5,5 @@ from team import *
 from project import *
 from question import *
 from company import *
-from rating import Rating
+from rating import *
+from comment import *

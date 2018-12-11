@@ -1,12 +1,13 @@
 from app import db
 from app.models.base import BaseModel
 
-class Project(BaseModel):
-	__tablename__ = 'project'
-	__json_public__ = ['id', 'name']
+class Comment(BaseModel):
+	__tablename__ = 'comment'
+	__json_public__ = ['id', 'desc']
 
-	name = db.Column(db.String(255))
-	type_id = db.Column('type_id', db.ForeignKey('review_type.id'))
+	desc = db.Column(db.Text)
+	object_id = db.Column(db.Integer)
+	user_id = db.Column('user_id', db.ForeignKey('user.id'))
 	
 	def __repr__(self):
-		return '<Project {}>'.format(self.id)
+		return '<Comment {}>'.format(self.id)
