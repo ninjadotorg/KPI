@@ -47,7 +47,7 @@ def add_type():
 		for d in data:
 			if 'name' in d:
 				r = ReviewType(
-					name=d['name']
+					name=d['name'].lower()
 				)
 				db.session.add(r)
 				db.session.flush()

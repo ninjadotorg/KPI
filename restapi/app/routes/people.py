@@ -45,13 +45,3 @@ def all_people():
 		return response_ok(response)
 	except Exception, ex:
 		return response_error(ex.message)
-
-
-@people_routes.route('/view/<int:people_id>', methods=['GET'])
-@jwt_required
-def view_detail(people_id):
-	try:
-		return response_ok()
-	except Exception, ex:
-		db.session.rollback()
-		return response_error(ex.message)

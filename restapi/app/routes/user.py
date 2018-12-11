@@ -63,7 +63,7 @@ def sign_up():
 		if is_valid_password(password) == False:
 			return response_error(MESSAGE.USER_INVALID_PASSWORD, CODE.USER_INVALID_PASSWORD)
 
-		t = db.session.query(ReviewType).filter(Type['People']).first()
+		t = db.session.query(ReviewType).filter(ReviewType.name==Type['People']).first()
 		if t is None:
 			return response_error(MESSAGE.TYPE_NOT_IN_DATABASE, CODE.TYPE_NOT_IN_DATABASE)
 

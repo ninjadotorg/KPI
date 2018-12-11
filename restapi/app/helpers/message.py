@@ -103,6 +103,11 @@ class MESSAGE(object):
 
 	# TYPE
 	TYPE_NOT_IN_DATABASE = 'You have not added type into database yet' 
+	TYPE_INVALID = 'Invalid type. It should be: people, team, project or company'
+
+	# ANSWER
+	ANSWER_INVALID_INPUT = 'Please check your input'
+	ANSWER_INVALID_QUESTION_ID = 'Please check your question id'
 
 
 class CODE(object):
@@ -208,3 +213,8 @@ class CODE(object):
 
 	# TYPE
 	TYPE_NOT_IN_DATABASE = '1071'
+	TYPE_INVALID = '1072'
+
+	# ANSWER
+	ANSWER_INVALID_INPUT = '1073'
+	ANSWER_INVALID_QUESTION_ID = '1074'

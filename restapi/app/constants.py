@@ -4,8 +4,8 @@ from decimal import *
 
 # ReviewType
 Type = {
-	'People': 'People',
-	'Team': 'Team',
-	'Project': 'Project',
-	'Company': 'Company'
+	'People': 'people',
+	'Team': 'team',
+	'Project': 'project',
+	'Company': 'company'
 }
