@@ -9,6 +9,7 @@ from app.routes.people import people_routes
 from app.routes.project import project_routes
 from app.routes.team import team_routes
 from app.routes.role import role_routes
+from app.routes.review_type import type_routes
 
 
 def init_routes(app):
@@ -21,4 +22,5 @@ def init_routes(app):
     app.register_blueprint(project_routes, url_prefix='/project')
     app.register_blueprint(team_routes, url_prefix='/team')
     app.register_blueprint(role_routes, url_prefix='/role')
+    app.register_blueprint(type_routes, url_prefix='/type')
     app.register_blueprint(user_routes)

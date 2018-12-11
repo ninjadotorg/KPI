@@ -11,43 +11,48 @@ from app import db, sg
 from datetime import datetime
 from sqlalchemy import and_
 
-from app.models import Team
+from app.models import ReviewType
 from app.helpers.message import MESSAGE, CODE
 from app.helpers.decorators import admin_required, dev_required
 from app.helpers.response import response_ok, response_error
 from flask_jwt_extended import jwt_required
 
 
-team_routes = Blueprint('team', __name__)
+type_routes = Blueprint('type', __name__)
 logfile = logging.getLogger('file')
 
 
-@team_routes.route('/list', methods=['GET'])
+@type_routes.route('/list', methods=['GET'])
 @jwt_required
-def all_teams():
+def all_types():
 	try:
-		ts = db.session.query(Team).all()
+		rs = db.session.query(ReviewType).all()
 		response = []
-		for t in ts:
-			response.append(t.to_json())
-			
+		for r in rs:
+			response.append(r.to_json())
+
 		return response_ok(response)
 	except Exception, ex:
-		db.session.rollback()
 		return response_error(ex.message)
 
 
-@team_routes.route('/add', methods=['POST'])
+@type_routes.route('/add', methods=['POST'])
 @admin_required
-def add_team():
+def add_type():
 	try:
 		data = request.json
 		if data is None:
 			return response_error(MESSAGE.INVALID_DATA, CODE.INVALID_DATA)
 
 		for d in data:
-			pass
+			if 'name' in d:
+				r = ReviewType(
+					name=d['name']
+				)
+				db.session.add(r)
+				db.session.flush()
 
+		db.session.commit()
 		return response_ok()
 	except Exception, ex:
 		db.session.rollback()

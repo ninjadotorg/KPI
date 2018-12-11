@@ -10,10 +10,11 @@ from app import db
 from datetime import datetime
 from flask_jwt_extended import (create_access_token)
 
-from app.models import User
+from app.models import User, ReviewType
 from app.helpers.utils import is_valid_email, is_valid_password
 from app.helpers.message import MESSAGE, CODE
 from app.helpers.response import response_ok, response_error
+from app.constants import Type
 
 
 user_routes = Blueprint('user', __name__)
@@ -62,12 +63,17 @@ def sign_up():
 		if is_valid_password(password) == False:
 			return response_error(MESSAGE.USER_INVALID_PASSWORD, CODE.USER_INVALID_PASSWORD)
 
+		t = db.session.query(ReviewType).filter(Type['People']).first()
+		if t is None:
+			return response_error(MESSAGE.TYPE_NOT_IN_DATABASE, CODE.TYPE_NOT_IN_DATABASE)
+
 		u = User.find_user_by_email(email)	
 		if u is None:
 			u = User(
 				name=name,
 				email=email,
-				password=hashlib.md5(password).hexdigest()
+				password=hashlib.md5(password).hexdigest(),
+				type_id=t.id
 			)
 			db.session.add(u)
 			db.session.flush()

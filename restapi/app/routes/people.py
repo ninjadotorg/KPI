@@ -9,8 +9,9 @@ import logging
 from flask import Blueprint, request, g
 from app import db
 from datetime import datetime
-from sqlalchemy import and_
+from sqlalchemy import and_, func
 
+from app.models import User
 from app.helpers.message import MESSAGE, CODE
 from app.helpers.decorators import admin_required, dev_required
 from app.helpers.response import response_ok, response_error
@@ -25,9 +26,24 @@ logfile = logging.getLogger('file')
 @jwt_required
 def all_people():
 	try:
-		return response_ok()
+		page = request.args.get('page', 0)
+		rows = db.session.query(func.count(User.id)).scalar()
+		users = db.session.query(User) \
+				.filter() \
+				.limit(10) \
+				.offset(page*10) \
+				.all()
+
+		response = {}
+		response['total'] = rows / 10 + 1
+
+		data = []
+		for u in users:
+			data.append(u.to_json())
+
+		response['people'] = data
+		return response_ok(response)
 	except Exception, ex:
-		db.session.rollback()
 		return response_error(ex.message)
 
 

@@ -101,6 +101,9 @@ class MESSAGE(object):
 	# REFERRAL
 	REFERRAL_USER_JOINED_ALREADY = 'User has joined referral program already!'
 
+	# TYPE
+	TYPE_NOT_IN_DATABASE = 'You have not added type into database yet' 
+
 
 class CODE(object):
 	# ERROR
@@ -202,3 +205,6 @@ class CODE(object):
 
 	# REFERRAL
 	REFERRAL_USER_JOINED_ALREADY = '1066'
+
+	# TYPE
+	TYPE_NOT_IN_DATABASE = '1071'
