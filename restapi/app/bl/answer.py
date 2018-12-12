@@ -1,7 +1,7 @@
 from app import db
-from sqlalchemy import func
+from sqlalchemy import func, and_
 
-from app.models import ReviewType, User, Project, Team, Company, Rating
+from app.models import ReviewType, User, Project, Team, Company, Rating, Comment, Question
 from app.constants import Type
 
 def is_valid_object_id(review_type, object_id):
@@ -42,12 +42,12 @@ def is_answer_question(user_id, review_type, object_id):
 	if rt is None:
 		return False
 
-	result = db.session.query(Rating).filter(User.id==user_id, User.type_id==rt.id).first()
+	result = db.session.query(Rating).filter(and_(Rating.user_id==user_id, Rating.question_id.in_(db.session.query(Question.id).filter(Question.type_id==rt.id)))).first()
 	if result is None:
 		return False
 
-	return True
-	
+	result = db.session.query(Comment).filter(Comment.user_id==user_id, Comment.type_id==rt.id).first()
+	if result is None:
+		return False
 
-def is_comment_question(user_id, review_type, object_id):
 	return True

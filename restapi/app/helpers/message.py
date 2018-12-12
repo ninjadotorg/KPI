@@ -108,6 +108,7 @@ class MESSAGE(object):
 	# ANSWER
 	ANSWER_INVALID_INPUT = 'Please check your input'
 	ANSWER_INVALID_QUESTION_ID = 'Please check your question id'
+	ANSWER_QUESTION_ALREADY = 'You has answered question already!'
 
 
 class CODE(object):
@@ -218,3 +219,4 @@ class CODE(object):
 	# ANSWER
 	ANSWER_INVALID_INPUT = '1073'
 	ANSWER_INVALID_QUESTION_ID = '1074'
+	ANSWER_QUESTION_ALREADY = '1075'
