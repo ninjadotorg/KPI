@@ -12,7 +12,7 @@ from app import db
 from datetime import datetime
 from sqlalchemy import and_, func
 
-from app.models import Rating, Comment, User
+from app.models import Rating, Comment, User, ReviewType, Question
 from app.helpers.message import MESSAGE, CODE
 from app.helpers.decorators import admin_required, dev_required
 from app.helpers.response import response_ok, response_error
@@ -89,6 +89,20 @@ def view_answer():
 		if result is False:
 			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
 
-		return response_ok()
+		rt = db.session.query(ReviewType).filter(ReviewType.name==func.binary(review_type)).first()
+		response = {}
+
+		# get all ratings
+		ratings = db.session.query(Rating).filter(and_(Rating.object_id==object_id, Rating.question_id.in_(db.session.query(Question.id).filter(Question.type_id==rt.id)))).all()
+		data = []
+		for r in ratings:
+			tmp = r.to_json()
+			tmp['question'] = r.question.to_json()
+			data.append(tmp)
+		response['ratings'] = data
+
+		# get comments
+
+		return response_ok(response)
 	except Exception, ex:
 		return response_error(ex.message)

@@ -1,7 +1,7 @@
 from app import db
 from sqlalchemy import func
 
-from app.models import ReviewType, User, Project, Team, Company
+from app.models import ReviewType, User, Project, Team, Company, Rating
 from app.constants import Type
 
 def is_valid_object_id(review_type, object_id):
@@ -29,4 +29,25 @@ def is_valid_object_id(review_type, object_id):
 	if result is None:
 		return False
 
+	return True
+
+
+def is_answer_question(user_id, review_type, object_id):
+	if review_type is None or \
+		object_id is None or \
+		user_id is None:
+		return False
+
+	rt = db.session.query(ReviewType).filter(ReviewType.name==func.binary(review_type)).first()
+	if rt is None:
+		return False
+
+	result = db.session.query(Rating).filter(User.id==user_id, User.type_id==rt.id).first()
+	if result is None:
+		return False
+
+	return True
+	
+
+def is_comment_question(user_id, review_type, object_id):
 	return True
