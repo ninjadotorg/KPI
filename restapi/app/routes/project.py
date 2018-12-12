@@ -26,17 +26,19 @@ logfile = logging.getLogger('file')
 @jwt_required
 def all_projects():
 	try:
-		page = request.args.get('page', 0)
+		page = int(request.args.get('page', 0))
+		offset = int(request.args.get('offset', 10))
+
 		rows = db.session.query(func.count(Project.id)).scalar()
 
 		projects = db.session.query(Project) \
 					.filter() \
-					.limit(10) \
-					.offset(page*10) \
+					.limit(offset) \
+					.offset(page*offset) \
 					.all()
 
 		response = {}
-		response['total'] = rows / 10 + 1
+		response['total'] = rows / offset + 1
 
 		data = []
 		for p in projects:

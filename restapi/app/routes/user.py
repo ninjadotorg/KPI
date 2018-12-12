@@ -57,6 +57,7 @@ def sign_up():
 		email = data['email']
 		password = data['password']
 		name = data.get('name', '')
+		title = data.get('title', '')
 		if is_valid_email(email) == False:
 			return response_error(MESSAGE.USER_INVALID_EMAIL, CODE.USER_INVALID_EMAIL)
 
@@ -73,7 +74,8 @@ def sign_up():
 				name=name,
 				email=email,
 				password=hashlib.md5(password).hexdigest(),
-				type_id=t.id
+				type_id=t.id,
+				title=title
 			)
 			db.session.add(u)
 			db.session.flush()
