@@ -13,7 +13,7 @@ from sqlalchemy import and_
 
 from app.models import Role
 from app.helpers.message import MESSAGE, CODE
-from app.helpers.decorators import admin_required, dev_required
+from app.helpers.decorators import admin_required
 from app.helpers.response import response_ok, response_error
 from flask_jwt_extended import jwt_required
 
@@ -32,7 +32,7 @@ def add_role():
 
 		for d in data:
 			r = Role(
-				name=d.get('name', '')
+				name=d.get('name', '').lower()
 			)
 			db.session.add(r)
 			db.session.flush()

@@ -4,11 +4,14 @@
 import os
 import json
 
+from sqlalchemy import func
+from flask_jwt_extended import get_jwt_identity
 from functools import wraps
 from flask import request, g
 from app import db
 from app.helpers.response import response_error
 from app.models import User
+from app.constants import Role
 
 
 trusted_proxies = ('127.0.0.1')
@@ -25,6 +28,37 @@ def admin_required(f):
         if remote not in white_ips:
             return response_error("Access deny!")       
 
+        return f(*args, **kwargs)
+    return wrap
+
+
+def hr_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        current_user = get_jwt_identity() 
+        user = db.session.query(User).filter(User.email==func.binary(current_user)).first()
+
+        if user is None or \
+            user.role is None or \
+            user.role.name != Role['HR']:
+			return response_error("Access deny!")
+
+        return f(*args, **kwargs)
+    return wrap
+
+
+def both_hr_and_amdin_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        current_user = get_jwt_identity() 
+        user = db.session.query(User).filter(User.email==func.binary(current_user)).first()
+        
+        if user is not None and \
+            user.role is None and \
+            (user.role.name != Role['HR'] or \
+            user.role.name != Role['Administrator']):
+            
+            return response_error("Access deny!")
         return f(*args, **kwargs)
     return wrap
 

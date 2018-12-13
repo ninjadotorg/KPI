@@ -6,6 +6,12 @@ from decimal import *
 Type = {
 	'People': 'people',
 	'Team': 'team',
-	'Project': 'project',
 	'Company': 'company'
+}
+
+
+# RoleType
+Role = {
+	'Administrator': 'administrator',
+	'HR': 'hr'
 }

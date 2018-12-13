@@ -13,7 +13,7 @@ from sqlalchemy import and_, func
 
 from app.models import ReviewType, Question
 from app.helpers.message import MESSAGE, CODE
-from app.helpers.decorators import admin_required, dev_required
+from app.helpers.decorators import admin_required, hr_required, both_hr_and_amdin_required
 from app.helpers.response import response_ok, response_error
 from flask_jwt_extended import jwt_required
 from app.constants import Type
@@ -48,7 +48,8 @@ def question_for_type():
 
 
 @question_routes.route('/add', methods=['POST'])
-@admin_required
+@jwt_required
+@both_hr_and_amdin_required
 def add_quesion_for_type():
 	"""
 	"	admin will add questions for object type which need to be reviewed
@@ -74,6 +75,44 @@ def add_quesion_for_type():
 				)
 				db.session.add(question)
 				db.session.flush()
+
+		db.session.commit()
+		return response_ok()
+	except Exception, ex:
+		db.session.rollback()
+		return response_error(ex.message)
+
+
+@question_routes.route('/crud/<int:question_id>', methods=['PUT', 'DELETE'])
+@jwt_required
+@both_hr_and_amdin_required
+def update_question_for_type(question_id):
+	"""
+	"	admin change question name for type
+	"""
+	try:
+		review_type = request.args.get('type', '')
+		if len(review_type) == 0:
+			return response_error(MESSAGE.TYPE_INVALID, CODE.TYPE_INVALID)
+		
+		t = db.session.query(ReviewType).filter(ReviewType.name==func.binary(review_type)).first()
+		if t is None:
+			return response_error(MESSAGE.TYPE_INVALID, CODE.TYPE_INVALID)
+
+		question = db.session.query(Question).filter(Question.id==question_id, Question.type_id==t.id).first()
+		if question is None:
+			return response_error(MESSAGE.QUESTION_NOT_EXIST, CODE.QUESTION_NOT_EXIST)
+
+		if request.method == 'PUT':
+			data = request.json
+			if data is None:
+				return response_error(MESSAGE.INVALID_DATA, CODE.INVALID_DATA)
+
+			name = data.get('name', '')
+			question.name = name
+
+		else:
+			db.session.delete(question)
 
 		db.session.commit()
 		return response_ok()

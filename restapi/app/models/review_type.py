@@ -13,9 +13,6 @@ class ReviewType(BaseModel):
 	teams = db.relationship('Team', backref='review_type', primaryjoin="ReviewType.id == Team.type_id",
 	                             lazy='dynamic')
 
-	projects = db.relationship('Project', backref='review_type', primaryjoin="ReviewType.id == Project.type_id",
-	                             lazy='dynamic')
-
 	companies = db.relationship('Company', backref='review_type', primaryjoin="ReviewType.id == Company.type_id",
 	                             lazy='dynamic')
 

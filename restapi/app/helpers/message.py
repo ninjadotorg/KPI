@@ -110,6 +110,9 @@ class MESSAGE(object):
 	ANSWER_INVALID_QUESTION_ID = 'Please check your question id'
 	ANSWER_QUESTION_ALREADY = 'You has answered question already!'
 
+	# QUESTION
+	QUESTION_NOT_EXIST = 'Your input question does not exist!'
+
 
 class CODE(object):
 	# ERROR
@@ -220,3 +223,6 @@ class CODE(object):
 	ANSWER_INVALID_INPUT = '1073'
 	ANSWER_INVALID_QUESTION_ID = '1074'
 	ANSWER_QUESTION_ALREADY = '1075'
+
+	# QUESTION
+	QUESTION_NOT_EXIST = '1076'

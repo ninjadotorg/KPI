@@ -14,7 +14,7 @@ from sqlalchemy import and_
 
 from app.models import Company, ReviewType
 from app.helpers.message import MESSAGE, CODE
-from app.helpers.decorators import admin_required, dev_required
+from app.helpers.decorators import admin_required
 from app.helpers.response import response_ok, response_error
 from app.constants import Type
 

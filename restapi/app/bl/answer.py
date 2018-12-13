@@ -1,7 +1,7 @@
 from app import db
 from sqlalchemy import func, and_
 
-from app.models import ReviewType, User, Project, Team, Company, Rating, Comment, Question
+from app.models import ReviewType, User, Team, Company, Rating, Comment, Question
 from app.constants import Type
 
 def is_valid_object_id(review_type, object_id):
@@ -16,9 +16,6 @@ def is_valid_object_id(review_type, object_id):
 	result = None
 	if review_type == Type['People']:
 		result = db.session.query(User).filter(User.id==object_id, User.type_id==rt.id).first()
-
-	elif review_type == Type['Project']:
-		result = db.session.query(Project).filter(Project.id==object_id, Project.type_id==rt.id).first()
 
 	elif review_type == Type['Team']:
 		result = db.session.query(Team).filter(Team.id==object_id, Team.type_id==rt.id).first()
