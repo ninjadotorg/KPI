@@ -42,11 +42,11 @@ def is_answer_question(user_id, review_type, object_id):
 	if rt is None:
 		return False
 
-	result = db.session.query(Rating).filter(and_(Rating.user_id==user_id, Rating.question_id.in_(db.session.query(Question.id).filter(Question.type_id==rt.id)))).first()
+	result = db.session.query(Rating).filter(and_(Rating.user_id==user_id, Rating.object_id==object_id, Rating.question_id.in_(db.session.query(Question.id).filter(Question.type_id==rt.id)))).first()
 	if result is None:
 		return False
 
-	result = db.session.query(Comment).filter(Comment.user_id==user_id, Comment.type_id==rt.id).first()
+	result = db.session.query(Comment).filter(Comment.user_id==user_id, Comment.type_id==rt.id, Comment.object_id==object_id).first()
 	if result is None:
 		return False
 
