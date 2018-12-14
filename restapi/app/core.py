@@ -5,11 +5,13 @@ from flask_sqlalchemy import SQLAlchemy
 
 from app.extensions.sg import SendGrid
 from app.extensions.mail_service import MailService
+from app.extensions.gc_storage import GoogleCloudStorage
 
 db = SQLAlchemy()
 jwt = JWTManager()
 sg = SendGrid()
 mail_services = MailService()
+gc_services = GoogleCloudStorage()
 
 # configure app from env + silent local settings.cfg
 def configure_app(app):

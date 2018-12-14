@@ -105,7 +105,8 @@ def view_answer():
 			tmp = r.to_json()
 			tmp['question'] = r.question.to_json()
 			data.append(tmp)
-		response['ratings'] = data
+		response['ratings'] = data		
+		response['first_review'] = True if len(data) == 0 else False
 
 		# get comments
 		comments = db.session.query(Comment).filter(and_(Comment.object_id==object_id, Comment.type_id==rt.id)).all()

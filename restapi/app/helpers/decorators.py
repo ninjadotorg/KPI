@@ -53,12 +53,15 @@ def both_hr_and_amdin_required(f):
         current_user = get_jwt_identity() 
         user = db.session.query(User).filter(User.email==func.binary(current_user)).first()
         
-        if user is not None and \
-            user.role is None and \
-            (user.role.name != Role['HR'] or \
-            user.role.name != Role['Administrator']):
-            
+        if user is None or \
+            user.role is None or \
+            user.role.name is None:
             return response_error("Access deny!")
+
+        if user.role.name != Role['HR'] and \
+            user.role.name != Role['Administrator']:
+            return response_error("Access deny!")
+
         return f(*args, **kwargs)
     return wrap
 

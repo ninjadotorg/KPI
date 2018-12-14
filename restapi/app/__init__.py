@@ -1,5 +1,5 @@
 from flask import Flask, g, redirect, request
-from app.core import db, jwt, sg, configure_app, mail_services
+from app.core import db, jwt, sg, configure_app, mail_services, gc_services
 from flask_cors import CORS
 from models import User
 from app.helpers.response import response_error
@@ -41,6 +41,8 @@ jwt.init_app(app)
 sg.init_app(app)
 # init mail service
 mail_services.init_app(app)
+# init google cloud service
+gc_services.init_app(app)
 
 
 @app.before_request
@@ -49,15 +51,14 @@ def before_request():
 	if rp != '/' and rp.endswith('/'):
 		return redirect(rp[:-1])
 
-	g.DISPATCHER_SERVICE_ENDPOINT = app.config.get('DISPATCHER_SERVICE_ENDPOINT')
-	g.SOLR_SERVICE = app.config.get('SOLR_SERVICE')
-	g.FCM_SERVICE = app.config.get('FCM_SERVICE')
 	g.MAIL_SERVICE = app.config.get('MAIL_SERVICE')
 	g.EMAIL = app.config.get('EMAIL')
 	g.PASSPHASE = app.config.get('PASSPHASE')
 	g.ENV = app.config.get('ENV')
 	g.UPLOAD_DIR = app.config.get('UPLOAD_DIR')
 	g.BASE_URL = app.config.get('BASE_URL')
+	g.GC_STORAGE_BUCKET = app.config.get('GC_STORAGE_BUCKET')
+	g.GC_STORAGE_FOLDER = app.config.get('GC_STORAGE_FOLDER')
 
 	g.start = [time.time(), request.base_url]
 	g.reported_time = app.config.get('REPORTED_TIME')

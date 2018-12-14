@@ -9,5 +9,10 @@ class Role(BaseModel):
 	users = db.relationship('User', backref='role', primaryjoin="Role.id == User.role_id",
 	                             lazy='dynamic')
 
+
+	@classmethod
+	def find_role_by_id(cls, role_id):
+		return Role.query.filter_by(id=role_id).first()
+
 	def __repr__(self):
 		return '<Role {}>'.format(self.id)

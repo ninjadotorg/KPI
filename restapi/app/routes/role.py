@@ -13,7 +13,7 @@ from sqlalchemy import and_
 
 from app.models import Role
 from app.helpers.message import MESSAGE, CODE
-from app.helpers.decorators import admin_required
+from app.helpers.decorators import both_hr_and_amdin_required
 from app.helpers.response import response_ok, response_error
 from flask_jwt_extended import jwt_required
 
@@ -23,7 +23,8 @@ logfile = logging.getLogger('file')
 
 
 @role_routes.route('/add', methods=['POST'])
-@admin_required
+@jwt_required
+@both_hr_and_amdin_required
 def add_role():
 	try:
 		data = request.json
@@ -41,4 +42,19 @@ def add_role():
 		return response_ok()
 	except Exception, ex:
 		db.session.rollback()
+		return response_error(ex.message)
+
+
+@role_routes.route('/list', methods=['GET'])
+@jwt_required
+@both_hr_and_amdin_required
+def all_roles():
+	try:
+		rs = db.session.query(Role).all()
+		response = []
+		for r in rs:
+			response.append(r.to_json())
+			
+		return response_ok(response)
+	except Exception, ex:
 		return response_error(ex.message)
