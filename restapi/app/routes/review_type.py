@@ -13,7 +13,7 @@ from sqlalchemy import and_
 
 from app.models import ReviewType
 from app.helpers.message import MESSAGE, CODE
-from app.helpers.decorators import admin_required
+from app.helpers.decorators import admin_required, both_hr_and_amdin_required
 from app.helpers.response import response_ok, response_error
 from flask_jwt_extended import jwt_required
 
@@ -37,7 +37,8 @@ def all_types():
 
 
 @type_routes.route('/add', methods=['POST'])
-@admin_required
+@jwt_required
+@both_hr_and_amdin_required
 def add_type():
 	try:
 		data = request.json
@@ -51,6 +52,33 @@ def add_type():
 				)
 				db.session.add(r)
 				db.session.flush()
+
+		db.session.commit()
+		return response_ok()
+	except Exception, ex:
+		db.session.rollback()
+		return response_error(ex.message)
+
+
+@type_routes.route('/crud/<int:review_type_id>', methods=['PUT', 'DELETE'])
+@jwt_required
+@both_hr_and_amdin_required
+def crud(review_type_id):
+	try:
+		rt = ReviewType.find_review_type_by_id(review_type_id)
+		if rt is None:
+			return response_error(MESSAGE.TYPE_INVALID, CODE.TYPE_INVALID)
+
+		if request.method == 'PUT':
+			data = request.json
+			if data is None:
+				return response_error(MESSAGE.INVALID_DATA, CODE.INVALID_DATA)
+
+			if 'name' in data:	
+				rt.name = data['name']
+				db.session.flush()
+		else:
+			db.session.delete(rt)		
 
 		db.session.commit()
 		return response_ok()

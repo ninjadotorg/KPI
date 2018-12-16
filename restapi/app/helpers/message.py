@@ -103,7 +103,7 @@ class MESSAGE(object):
 
 	# TYPE
 	TYPE_NOT_IN_DATABASE = 'You have not added type into database yet' 
-	TYPE_INVALID = 'Invalid type. It should be: people, team, project or company'
+	TYPE_INVALID = 'Invalid type. It should be: people, team, or company'
 
 	# ANSWER
 	ANSWER_INVALID_INPUT = 'Please check your input'
@@ -113,6 +113,15 @@ class MESSAGE(object):
 	# QUESTION
 	QUESTION_NOT_EXIST = 'Your input question does not exist!'
 
+	# ROLE
+	ROLE_NOT_FOUND = 'Role not found. Please check your input'
+	ROLE_INVALID = 'Role invalid. Please contact admin for support'
+
+	# COMPANY
+	COMPANY_NOT_FOUND = 'Company not found. Please check your input'
+
+	# TEAM
+	TEAM_NOT_FOUND = 'Team not found. Please check your input'
 
 class CODE(object):
 	# ERROR
@@ -226,3 +235,13 @@ class CODE(object):
 
 	# QUESTION
 	QUESTION_NOT_EXIST = '1076'
+
+	# ROLE
+	ROLE_NOT_FOUND = '1077'
+	ROLE_INVALID = '1078'
+
+	# COMPANY
+	COMPANY_NOT_FOUND = '1079'
+
+	# TEAM
+	TEAM_NOT_FOUND = '1080'

@@ -9,5 +9,9 @@ class Company(BaseModel):
 	desc = db.Column(db.Text)
 	type_id = db.Column('type_id', db.ForeignKey('review_type.id'))
 	
+	@classmethod
+	def find_company_by_id(cls, company_id):
+		return db.session.query(Company).filter(Company.id==company_id).first()
+		
 	def __repr__(self):
 		return '<Company {}>'.format(self.id)

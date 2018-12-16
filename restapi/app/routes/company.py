@@ -14,7 +14,7 @@ from sqlalchemy import and_
 
 from app.models import Company, ReviewType
 from app.helpers.message import MESSAGE, CODE
-from app.helpers.decorators import admin_required
+from app.helpers.decorators import both_hr_and_amdin_required
 from app.helpers.response import response_ok, response_error
 from app.constants import Type
 
@@ -38,7 +38,8 @@ def all_companies():
 
 
 @company_routes.route('/add', methods=['POST'])
-@admin_required
+@jwt_required
+@both_hr_and_amdin_required
 def add_company():
 	try:
 		data = request.json
@@ -57,6 +58,34 @@ def add_company():
 				)
 				db.session.add(company)
 				db.session.flush()
+
+		db.session.commit()
+		return response_ok()
+	except Exception, ex:
+		db.session.rollback()
+		return response_error(ex.message)
+
+
+@company_routes.route('/crud/<int:company_id>', methods=['PUT', 'DELETE'])
+@jwt_required
+@both_hr_and_amdin_required
+def crud(company_id):
+	try:
+		company = Company.find_company_by_id(company_id)
+		if company is None:
+			return response_error(MESSAGE.COMPANY_NOT_FOUND, CODE.COMPANY_NOT_FOUND)
+
+		if request.method == 'PUT':
+			data = request.json
+			if data is None:
+				return response_error(MESSAGE.INVALID_DATA, CODE.INVALID_DATA)
+
+			if 'name' in data:
+				company.name = data['name']
+				db.session.flush()
+
+		else:
+			db.session.delete(company)
 
 		db.session.commit()
 		return response_ok()

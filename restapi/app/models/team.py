@@ -9,5 +9,9 @@ class Team(BaseModel):
 	desc = db.Column(db.Text)
 	type_id = db.Column('type_id', db.ForeignKey('review_type.id'))
 	
+	@classmethod
+	def find_team_by_id(cls, team_id):
+		return db.session.query(Team).filter(Team.id==team_id).first()
+
 	def __repr__(self):
 		return '<Team {}>'.format(self.id)

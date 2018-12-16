@@ -19,5 +19,9 @@ class ReviewType(BaseModel):
 	questions = db.relationship('Question', backref='review_type', primaryjoin="ReviewType.id == Question.type_id",
 	                             lazy='dynamic')
 
+	@classmethod
+	def find_review_type_by_id(cls, type_id):
+		return db.session.query(ReviewType).filter(ReviewType.id==type_id).first()
+
 	def __repr__(self):
 		return '<ReviewType {}>'.format(self.id)

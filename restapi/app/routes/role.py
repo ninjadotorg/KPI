@@ -32,11 +32,14 @@ def add_role():
 			return response_error(MESSAGE.INVALID_DATA, CODE.INVALID_DATA)
 
 		for d in data:
-			r = Role(
-				name=d.get('name', '').lower()
-			)
-			db.session.add(r)
-			db.session.flush()
+			if d.get('name', '').lower() in CONST.ROLES:
+				r = Role(
+					name=d.get('name', '').lower()
+				)
+				db.session.add(r)
+				db.session.flush()
+			else:
+				return response_error(MESSAGE.ROLE_INVALID, CODE.ROLE_INVALID)
 
 		db.session.commit()
 		return response_ok()
@@ -57,4 +60,36 @@ def all_roles():
 			
 		return response_ok(response)
 	except Exception, ex:
+		return response_error(ex.message)
+
+
+@role_routes.route('/crud/<int:role_id>', methods=['PUT', 'DELETE'])
+@jwt_required
+@both_hr_and_amdin_required
+def crud(role_id):
+	try:
+
+		role = Role.find_role_by_id(role_id)
+		if role is None:
+			return response_error(MESSAGE.ROLE_NOT_FOUND, CODE.ROLE_NOT_FOUND)
+
+		if request.method == 'PUT':
+			data = request.json
+			if data is None:
+				return response_error(MESSAGE.INVALID_DATA, CODE.INVALID_DATA)
+
+			if 'name' in data and data['name'].lower() in CONST.ROLES:
+				role.name = data['name'].lower()
+				db.session.flush()
+
+			else:
+				return response_error(MESSAGE.ROLE_INVALID, CODE.ROLE_INVALID)
+
+		else:
+			db.session.delete(role)
+
+		db.session.commit()
+		return response_ok()
+	except Exception, ex:
+		db.session.rollback()
 		return response_error(ex.message)

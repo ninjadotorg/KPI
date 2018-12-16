@@ -50,6 +50,7 @@ def all_teams():
 
 
 @team_routes.route('/add', methods=['POST'])
+@jwt_required
 @both_hr_and_amdin_required
 def add_team():
 	try:
@@ -69,6 +70,33 @@ def add_team():
 				)
 				db.session.add(team)
 				db.session.flush()
+
+		db.session.commit()
+		return response_ok()
+	except Exception, ex:
+		db.session.rollback()
+		return response_error(ex.message)
+
+
+@team_routes.route('/crud/<int:team_id>', methods=['PUT', 'DELETE'])
+@jwt_required
+@both_hr_and_amdin_required
+def crud(team_id):
+	try:
+		t = Team.find_team_by_id(team_id)
+		if t is None:
+			return response_error(MESSAGE.TEAM_NOT_FOUND, CODE.TEAM_NOT_FOUND)
+
+		if request.method == 'PUT':
+			data = request.json
+			if data is None:
+				return response_error(MESSAGE.INVALID_DATA, CODE.INVALID_DATA)
+
+			if 'name' in data:
+				r.name = data['name']
+				db.session.flush()
+		else:
+			db.session.delete(t)
 
 		db.session.commit()
 		return response_ok()
