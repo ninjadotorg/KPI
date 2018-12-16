@@ -6,9 +6,7 @@ class Comment(BaseModel):
 	__json_public__ = ['id', 'desc']
 
 	desc = db.Column(db.Text)
-	object_id = db.Column(db.Integer)
-	user_id = db.Column('user_id', db.ForeignKey('user.id'))
-	type_id = db.Column('type_id', db.ForeignKey('review_type.id'))
+	rating_id = db.Column('rating_id', db.ForeignKey('rating.id'))
 	
 	def __repr__(self):
 		return '<Comment {}>'.format(self.id)

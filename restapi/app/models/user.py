@@ -17,6 +17,9 @@ class User(BaseModel):
 	role_id = db.Column('role_id', db.ForeignKey('role.id'))
 	type_id = db.Column('type_id', db.ForeignKey('review_type.id'))
 
+	ratings = db.relationship('Rating', backref='user', primaryjoin="User.id == Rating.user_id",
+	                             lazy='dynamic')
+
 	@classmethod
 	def find_user_by_id(cls, user_id):
 		return User.query.filter_by(id=user_id).first()
