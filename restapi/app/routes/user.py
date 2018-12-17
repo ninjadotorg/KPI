@@ -8,10 +8,11 @@ import requests
 import app.constants as CONST
 import app.bl.storage as storage_bl
 
+from sqlalchemy import func
 from flask import Blueprint, request, g
 from app import db
 from datetime import datetime
-from flask_jwt_extended import (create_access_token, jwt_required)
+from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_identity)
 
 from app.core import gc_services
 from app.models import User, ReviewType, Role
@@ -52,8 +53,8 @@ def auth():
 
 
 @user_routes.route('/sign-up', methods=['POST'])
-# @jwt_required
-# @both_hr_and_amdin_required
+@jwt_required
+@both_hr_and_amdin_required
 def sign_up():
 	try:
 		saved_path = None
@@ -186,6 +187,39 @@ def delete_user(user_id):
 			return response_error(MESSAGE.USER_INVALID, CODE.USER_INVALID)
 
 		db.session.delete(u)
+		db.session.commit()
+		return response_ok()
+
+	except Exception, ex:
+		db.session.rollback()
+		return response_error(ex.message)
+
+
+@user_routes.route('/change-password', methods=['POST'])
+@jwt_required
+def change_password():
+	try:
+		data = request.json
+		if data is None:
+			return response_error(MESSAGE.INVALID_DATA, CODE.INVALID_DATA)
+
+		current_user = get_jwt_identity()
+		user = db.session.query(User).filter(User.email==func.binary(current_user)).first()
+		if user is None:
+			return response_error(MESSAGE.USER_INVALID_EMAIL, CODE.USER_INVALID_EMAIL)
+
+		current_password = data.get('current_password', '')
+		new_password = data.get('new_password', '')
+
+		current_password = hashlib.md5(current_password).hexdigest()
+
+		if is_valid_password(new_password) == False:
+			return response_error(MESSAGE.USER_INVALID_PASSWORD, CODE.USER_INVALID_PASSWORD)
+
+		if user.password == current_password:
+			user.password = hashlib.md5(new_password).hexdigest()
+
+		db.session.flush()
 		db.session.commit()
 		return response_ok()
 
