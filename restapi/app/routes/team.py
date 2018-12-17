@@ -6,6 +6,8 @@ import json
 import app.constants as CONST
 import logging
 
+import app.bl.people as people_bl
+
 from flask import Blueprint, request, g
 from flask_jwt_extended import jwt_required
 from app import db, sg
@@ -41,7 +43,9 @@ def all_teams():
 
 		data = []
 		for t in teams:
-			data.append(t.to_json())
+			tmp = t.to_json()
+			tmp['rating'] = people_bl.count_rating_for_object(t, CONST.Type['Team'])
+			data.append(tmp)
 
 		response['teams'] = data
 		return response_ok(response)

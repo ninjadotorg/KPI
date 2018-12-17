@@ -123,13 +123,67 @@ def view_answer():
 			tmp = []
 			for c in comments:
 				cjson = c.to_json()
-				cjson['user'] = c.rating.user.to_json()
+				if c.rating.user is not None:
+					cjson['user'] = c.rating.user.to_json()
+				else:
+					cjson['user'] = None
+
 				tmp.append(cjson)
 			data['comments'] = tmp
 			rs.append(data)
 
 		response['ratings'] = rs
 		response['first_review'] = 1 if len(ratings) == 0 else 0
+		response['user'] = user.to_json()
+
+		return response_ok(response)
+	except Exception, ex:
+		return response_error(ex.message)
+
+
+@answer_routes.route('/view-detail', methods=['GET'])
+@jwt_required
+def view_detail():
+	"""
+	"	view all ratings and comments of question id
+	"""
+	try:
+		question_id = request.args.get('id', -1)
+		current_user = get_jwt_identity()
+		user = db.session.query(User).filter(User.email==func.binary(current_user)).first()
+		if user is None:
+			return response_error(MESSAGE.USER_INVALID_EMAIL, CODE.USER_INVALID_EMAIL)
+		
+		response = {}
+
+		# get all ratings
+		ratings = db.session.query(Question.name, Question.id, func.avg(Rating.point).label('average'))\
+							.filter(Question.id==question_id) \
+							.filter(Question.id==Rating.question_id) \
+							.group_by(Question.name, Question.id) \
+							.all()
+
+		rs = []
+		for r in ratings:
+			data = {
+				"id": r.id,
+				"name": r.name,
+				"average": r.average
+			}
+			comments = db.session.query(Comment).filter(Comment.rating_id.in_(db.session.query(Rating.id).filter(Rating.question_id==r.id))).all()
+			tmp = []
+			for c in comments:
+				cjson = c.to_json()
+				if c.rating.user is not None:
+					cjson['user'] = c.rating.user.to_json()
+				else:
+					cjson['user'] = None
+
+				tmp.append(cjson)
+			data['comments'] = tmp
+			rs.append(data)
+
+		response['ratings'] = rs
 		response['user'] = user.to_json()
 
 		return response_ok(response)

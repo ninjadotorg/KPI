@@ -6,6 +6,8 @@ import json
 import app.constants as CONST
 import logging
 
+import app.bl.people as people_bl
+
 from flask import Blueprint, request, g
 from flask_jwt_extended import jwt_required
 from app import db, sg
@@ -30,7 +32,9 @@ def all_companies():
 		cs = db.session.query(Company).all()
 		response = []
 		for c in cs:
-			response.append(c.to_json())
+			tmp = c.to_json()
+			tmp['rating'] = people_bl.count_rating_for_object(c, CONST.Type['Company'])
+			response.append(tmp)
 			
 		return response_ok(response)
 	except Exception, ex:

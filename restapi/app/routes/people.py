@@ -6,6 +6,8 @@ import json
 import app.constants as CONST
 import logging
 
+import app.bl.people as people_bl
+
 from flask import Blueprint, request, g
 from app import db
 from datetime import datetime
@@ -20,7 +22,6 @@ from flask_jwt_extended import jwt_required
 
 people_routes = Blueprint('people', __name__)
 logfile = logging.getLogger('file')
-
 
 @people_routes.route('/list', methods=['GET'])
 @jwt_required
@@ -40,7 +41,9 @@ def all_people():
 
 		data = []
 		for u in users:
-			data.append(u.to_json())
+			tmp = u.to_json()
+			tmp['rating'] = people_bl.count_rating_for_object(u, CONST.Type['People'])
+			data.append(tmp)
 
 		response['people'] = data
 		return response_ok(response)
