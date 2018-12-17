@@ -157,33 +157,30 @@ def view_detail():
 		response = {}
 
 		# get all ratings
-		ratings = db.session.query(Question.name, Question.id, func.avg(Rating.point).label('average'))\
-							.filter(Question.id==question_id) \
-							.filter(Question.id==Rating.question_id) \
-							.group_by(Question.name, Question.id) \
-							.all()
+		r = db.session.query(Question.name, Question.id, func.avg(Rating.point).label('average'))\
+						.filter(Question.id==question_id) \
+						.filter(Question.id==Rating.question_id) \
+						.group_by(Question.name, Question.id) \
+						.first()
 
-		rs = []
-		for r in ratings:
-			data = {
-				"id": r.id,
-				"name": r.name,
-				"average": r.average
-			}
-			comments = db.session.query(Comment).filter(Comment.rating_id.in_(db.session.query(Rating.id).filter(Rating.question_id==r.id))).all()
-			tmp = []
-			for c in comments:
-				cjson = c.to_json()
-				if c.rating.user is not None:
-					cjson['user'] = c.rating.user.to_json()
-				else:
-					cjson['user'] = None
+		data = {
+			"id": r.id,
+			"name": r.name,
+			"average": r.average
+		}
+		comments = db.session.query(Comment).filter(Comment.rating_id.in_(db.session.query(Rating.id).filter(Rating.question_id==r.id))).all()
+		tmp = []
+		for c in comments:
+			cjson = c.to_json()
+			if c.rating.user is not None:
+				cjson['user'] = c.rating.user.to_json()
+			else:
+				cjson['user'] = None
 
-				tmp.append(cjson)
-			data['comments'] = tmp
-			rs.append(data)
-
-		response['ratings'] = rs
+			tmp.append(cjson)
+			
+		data['comments'] = tmp
+		response['ratings'] = data
 		response['user'] = user.to_json()
 
 		return response_ok(response)
