@@ -52,8 +52,8 @@ def auth():
 
 
 @user_routes.route('/sign-up', methods=['POST'])
-@jwt_required
-@both_hr_and_amdin_required
+# @jwt_required
+# @both_hr_and_amdin_required
 def sign_up():
 	try:
 		saved_path = None
