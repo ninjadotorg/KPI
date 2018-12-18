@@ -44,7 +44,7 @@ def submit_answer():
 			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
 
 		result = answer_bl.is_valid_object_id(review_type, object_id)
-		if result is False:
+		if result is None:
 			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
 
 		if answer_bl.is_answer_question(user.id, review_type, object_id):
@@ -89,17 +89,13 @@ def view_answer():
 	try:
 		review_type = request.args.get('type', '')
 		object_id = request.args.get('id', -1)
-		current_user = get_jwt_identity()
-		user = db.session.query(User).filter(User.email==func.binary(current_user)).first()
-		if user is None:
-			return response_error(MESSAGE.USER_INVALID_EMAIL, CODE.USER_INVALID_EMAIL)
 		
 		if len(review_type) == 0 or \
 			object_id == -1:
 			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
 
 		result = answer_bl.is_valid_object_id(review_type, object_id)
-		if result is False:
+		if result is None:
 			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
 
 		rt = db.session.query(ReviewType).filter(ReviewType.name==func.binary(review_type)).first()
@@ -134,7 +130,7 @@ def view_answer():
 
 		response['ratings'] = rs
 		response['first_review'] = 1 if len(ratings) == 0 else 0
-		response['user'] = user.to_json()
+		response['reviewed_object'] = result.to_json()
 
 		return response_ok(response)
 	except Exception, ex:
@@ -145,19 +141,27 @@ def view_answer():
 @jwt_required
 def view_detail():
 	"""
-	"	view all ratings and comments of question id
+	"	view all ratings and comments of user with question id
 	"""
 	try:
-		question_id = request.args.get('id', -1)
-		current_user = get_jwt_identity()
-		user = db.session.query(User).filter(User.email==func.binary(current_user)).first()
-		if user is None:
-			return response_error(MESSAGE.USER_INVALID_EMAIL, CODE.USER_INVALID_EMAIL)
+		review_type = request.args.get('type', '')
+		question_id = request.args.get('question_id', -1)
+		object_id = request.args.get('id', -1)
+
+		if question_id == -1 or \
+			object_id == -1:
+			return response_error(MESSAGE.ANSWER_INVALID_QUESTION_ID, CODE.ANSWER_INVALID_QUESTION_ID)
+
+		result = answer_bl.is_valid_object_id(review_type, object_id)
+		if result is None:
+			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
 		
+		rt = db.session.query(ReviewType).filter(ReviewType.name==func.binary(review_type)).first()
 		response = {}
 
 		# get all ratings
 		r = db.session.query(Question.name, Question.id, func.avg(Rating.point).label('average'))\
+						.filter(and_(Rating.object_id==object_id, Rating.question_id.in_(db.session.query(Question.id).filter(Question.type_id==rt.id)))) \
 						.filter(Question.id==question_id) \
 						.filter(Question.id==Rating.question_id) \
 						.group_by(Question.name, Question.id) \
@@ -181,7 +185,7 @@ def view_detail():
 			
 		data['comments'] = tmp
 		response['ratings'] = data
-		response['user'] = user.to_json()
+		response['reviewed_object'] = result.to_json()
 
 		return response_ok(response)
 	except Exception, ex:

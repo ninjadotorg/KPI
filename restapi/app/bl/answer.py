@@ -10,11 +10,11 @@ from app.helpers.utils import utc_to_local
 def is_valid_object_id(review_type, object_id):
 	if review_type is None or \
 		object_id is None:
-		return False
+		return None
 
 	rt = db.session.query(ReviewType).filter(ReviewType.name==func.binary(review_type)).first()
 	if rt is None:
-		return False
+		return None
 
 	result = None
 	if review_type == Type['People']:
@@ -26,10 +26,7 @@ def is_valid_object_id(review_type, object_id):
 	elif review_type == Type['Company']:
 		result = db.session.query(Company).filter(Company.id==object_id, Company.type_id==rt.id).first()
 
-	if result is None:
-		return False
-
-	return True
+	return result
 
 
 def is_answer_question(user_id, review_type, object_id):
