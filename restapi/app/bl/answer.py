@@ -2,6 +2,7 @@ import time
 
 from app import db
 from sqlalchemy import func, and_
+from datetime import datetime
 
 from app.models import ReviewType, User, Team, Company, Rating, Question
 from app.constants import Type
