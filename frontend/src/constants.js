@@ -1,6 +1,5 @@
 export const BASE_API = {
-  BASE_URL:
-    process.env.NODE_ENV === 'production' ? 'http://35.247.16.10:8000' : '',
+  BASE_URL: process.env.NODE_ENV === 'production' ? 'https://35.247.16.10' : '',
   TIMEOUT: 10000
 };
 
