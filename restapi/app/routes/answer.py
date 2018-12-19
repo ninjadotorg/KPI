@@ -115,7 +115,7 @@ def view_answer():
 				"name": r.name,
 				"average": r.average
 			}
-			comments = db.session.query(Comment).filter(Comment.rating_id.in_(db.session.query(Rating.id).filter(Rating.question_id==r.id))).limit(5).all()
+			comments = db.session.query(Comment).filter(Comment.rating_id.in_(db.session.query(Rating.id).filter(Rating.question_id==r.id, Rating.object_id==object_id))).limit(5).all()
 			tmp = []
 			for c in comments:
 				cjson = c.to_json()
@@ -172,7 +172,7 @@ def view_detail():
 			"name": r.name,
 			"average": r.average
 		}
-		comments = db.session.query(Comment).filter(Comment.rating_id.in_(db.session.query(Rating.id).filter(Rating.question_id==r.id))).all()
+		comments = db.session.query(Comment).filter(Comment.rating_id.in_(db.session.query(Rating.id).filter(Rating.question_id==r.id, Rating.object_id==object_id))).all()
 		tmp = []
 		for c in comments:
 			cjson = c.to_json()
