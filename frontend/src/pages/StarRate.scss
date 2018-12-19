@@ -1,0 +1,12 @@
+.react-rater-star {
+    color: #ccc;
+}
+.react-rater-star.is-active {
+    color: #fc6; 
+}
+.react-rater-star.will-be-active {
+    color: #fc6; 
+}
+.react-rater-star.is-active-half::before {
+    color: #fc6; 
+}
