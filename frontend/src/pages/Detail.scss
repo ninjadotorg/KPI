@@ -14,6 +14,14 @@
     .seeMore {
         margin-left: 100px;
     }
+    .rater {
+        display: flex;
+        align-items: center;
+    }
+    .raterNumber {
+        margin-left: 5px;
+        color: gray;
+    }
 }
 .wrapperCommentsList{
     padding: (0 50px);
