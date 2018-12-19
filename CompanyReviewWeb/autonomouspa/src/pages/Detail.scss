@@ -1,0 +1,37 @@
+.wrapperDetail {
+    .wrapperItem {
+        margin-bottom: 20px;
+    }
+    .buttonDetail {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        background-color: blue;
+        color: white;
+    }
+    .cardComment {
+        margin-top: 10px;
+    }
+    .seeMore {
+        margin-left: 100px;
+    }
+}
+.wrapperCommentsList{
+    padding: (0 50px);
+    .wrapperCommentItem {
+        margin-bottom: 20px;
+    }
+    .wrapperUser {
+        display: flex;
+        align-items: center;
+    }
+    .name {
+        color: gray;
+        margin-left: 10px;
+        font-weight: bold;
+    }
+    .desc {
+        margin-left: 50px;
+        margin-top: 5px;
+        color: gray;
+    }
+}
