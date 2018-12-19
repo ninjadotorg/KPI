@@ -8,4 +8,4 @@ sys.setdefaultencoding('utf-8')
 
 
 if __name__ == "__main__":
-	run_simple('0.0.0.0', 8000, application, use_reloader=True, use_debugger=True, threaded=True)
+	run_simple('0.0.0.0', 8000, application, use_reloader=True, use_debugger=True, threaded=True, ssl_context='adhoc')
