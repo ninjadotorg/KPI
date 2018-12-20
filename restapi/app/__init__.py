@@ -1,6 +1,6 @@
 from flask import Flask, g, redirect, request
 from app.core import db, jwt, sg, configure_app, mail_services, gc_services
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from models import User
 from app.helpers.response import response_error
 from app.routes import init_routes
@@ -46,6 +46,7 @@ gc_services.init_app(app)
 
 
 @app.before_request
+@cross_origin(supports_credentials=True)
 def before_request():
 	rp = request.path
 	if rp != '/' and rp.endswith('/'):
@@ -64,6 +65,7 @@ def before_request():
 	g.reported_time = app.config.get('REPORTED_TIME')
 
 @app.after_request
+@cross_origin(supports_credentials=True)
 def after_request(response):
 	if 'start' in g:
 		start, url = g.start
