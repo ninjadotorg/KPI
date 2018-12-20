@@ -94,7 +94,7 @@ def sign_up():
 				password=hashlib.md5(password).hexdigest(),
 				type_id=t.id,
 				title=title,
-				avatar='{}{}'.format(CONST.BASE_IMAGE_URL, image_name)
+				avatar='{}{}'.format(CONST.BASE_IMAGE_URL, image_name) if image_name is not None else None
 			)
 			db.session.add(u)
 			db.session.flush()
