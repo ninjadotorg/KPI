@@ -32,7 +32,7 @@ app.url_map.strict_slashes = False
 configure_app(app)
 
 # Accept CORS
-CORS(app)
+# CORS(app)
 # init db
 db.init_app(app)
 # init jwt
