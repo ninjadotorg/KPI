@@ -220,6 +220,8 @@ def change_password():
 		if user.password == current_password:
 			user.password = hashlib.md5(new_password).hexdigest()
 			user.is_need_change_password = 0
+		else:
+			return response_error(MESSAGE.USER_INVALID_PASSWORD, CODE.USER_INVALID_PASSWORD)
 
 		db.session.flush()
 		db.session.commit()
