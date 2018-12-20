@@ -84,7 +84,10 @@ class Detail extends Component {
             <div className="wrapperItem" key={id}>
                 <ListItem>
                     <ListItemText>{index+1}. {name}</ListItemText>
-                    <Rater total={5} rating={average} />
+                    <div className="rater">
+                        <Rater total={5} rating={average} interactive={false}/>
+                        <div className="raterNumber">({average})</div>
+                    </div>
                 </ListItem>
                 <Comments comments={comments} />
                 {this.renderSeeMore(id)}
