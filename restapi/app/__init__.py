@@ -32,7 +32,7 @@ app.url_map.strict_slashes = False
 configure_app(app)
 
 # Accept CORS
-CORS(app, support_credentials=True)
+CORS(app)
 # init db
 db.init_app(app)
 # init jwt
@@ -46,7 +46,6 @@ gc_services.init_app(app)
 
 
 @app.before_request
-@cross_origin(supports_credentials=True)
 def before_request():
 	rp = request.path
 	if rp != '/' and rp.endswith('/'):
@@ -65,7 +64,6 @@ def before_request():
 	g.reported_time = app.config.get('REPORTED_TIME')
 
 @app.after_request
-@cross_origin(supports_credentials=True)
 def after_request(response):
 	if 'start' in g:
 		start, url = g.start
