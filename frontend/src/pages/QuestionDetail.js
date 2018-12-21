@@ -29,7 +29,6 @@ class QuestionDetail extends Component {
     componentDidMount() {
         
         const query = getQueryString();
-        console.log('Query:', query);
         if (query.length === 5){
             const questionId = query[query.length-1];
             const userId = query[query.length-2];

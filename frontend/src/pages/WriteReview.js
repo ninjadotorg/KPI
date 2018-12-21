@@ -64,7 +64,6 @@ class WriteReview extends Component {
     renderReviews = () => {
         const { questions, category, userId, name } = this.state;
         if (questions.length === 0) return null;
-        console.log('Selected Questions:', questions);
 
         return (
             <Reviews 
