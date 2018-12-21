@@ -6,7 +6,7 @@ import AvatarField from '../modules/AvatarField';
 import ViewButton from '../modules/ViewButton';
 
 export const UserList = props => (
-    <List {...props}>
+    <List {...props} bulkActionButtons={false}>
         <Datagrid>
             {<AvatarField source="avatar" title="Avatar" />}
             <TextField source="name" />
