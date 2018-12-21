@@ -4,13 +4,14 @@ from sqlalchemy import func
 
 class User(BaseModel):
 	__tablename__ = 'user'
-	__json_public__ = ['id', 'email', 'name', 'is_need_change_password', 'title', 'avatar']
+	__json_public__ = ['id', 'email', 'name', 'is_need_change_password', 'title', 'avatar', 'keywords']
 
 	email = db.Column(db.String(255))
 	name = db.Column(db.String(255))
 	title = db.Column(db.String(255))
 	password = db.Column(db.String(255))
 	avatar = db.Column(db.String(255))
+	keywords = db.Column(db.String(255))
 	is_need_change_password = db.Column(db.Integer,
 										server_default=str(1),
 										default=1)

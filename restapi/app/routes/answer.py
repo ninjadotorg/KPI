@@ -47,14 +47,13 @@ def submit_answer():
 		if result is None:
 			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
 
-		if answer_bl.is_answer_question(user.id, review_type, object_id):
-			return response_error(MESSAGE.ANSWER_QUESTION_ALREADY, CODE.ANSWER_QUESTION_ALREADY)
-
 		rt = db.session.query(ReviewType).filter(ReviewType.name==func.binary(review_type)).first()
 		ratings = data['ratings']
 		if ratings is not None:
-
 			for r in ratings:
+				if answer_bl.is_answer_question(user.id, review_type, object_id, r['question_id']):
+					return response_error(MESSAGE.ANSWER_QUESTION_ALREADY, CODE.ANSWER_QUESTION_ALREADY)
+
 				rating = Rating(
 					point=r['rating'],
 					question_id=r['question_id'],

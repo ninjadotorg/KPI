@@ -243,3 +243,21 @@ def import_user():
 	except Exception, ex:
 		db.session.rollback()
 		return response_error(ex.message)
+
+
+@user_routes.route('/add', methods=['GET'])
+@admin_required
+def add():
+	try:
+		users = db.session.query(User).all()
+		for u in users:
+			normalized_words = user_bl.no_accent_vietnamese(u.name)
+			u.keywords = normalized_words
+			db.session.flush()
+		
+		db.session.commit()
+		return response_ok()
+
+	except Exception, ex:
+		db.session.rollback()
+		return response_error(ex.message)
