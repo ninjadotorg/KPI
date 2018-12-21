@@ -6,26 +6,6 @@ import {
     GET_LIST,
     GET_ONE,
 } from 'react-admin';
-const listPeople = [
-    {
-        "avatar": "https://s.pacn.ws/1500/qc/pokemon-all-star-collection-plush-marill-small-474201.2.jpg",
-        "email": "khanh.p@ninja.org",
-        "id": 1,
-        "is_need_change_password": 1,
-        "name": "Khanh",
-        "point":4,
-        "title": null
-    },
-    {
-        "avatar": "https://s.pacn.ws/1500/qc/pokemon-all-star-collection-plush-marill-small-474201.2.jpg",
-        "email": "khanh.p@ninja.org",
-        "id": 2,
-        "is_need_change_password": 1,
-        "name": "Sa",
-        "point":5,
-        "title": null
-    }
-];
 const apiUrl = BASE_API.BASE_URL;
 const handlerUrl = (type, resource, params) => {
     let url = '';
@@ -56,11 +36,18 @@ export default (type, resource, params) => {
             
             case GET_LIST:
                 const { perPage } = params.pagination;
+                const { filter } = params;
+                console.log('Filter:', filter);
                 const { total } = data.data;
                 const totalNumber = total * perPage;
                 switch (resource) {
                     case 'people':
-                        const { people } = data.data;
+                        let { people } = data.data;
+                        const { name } = filter;
+                        if(name){
+                            people = people.filter(item => item.name.toUpperCase().match(name.toUpperCase()));
+                        }
+
                         return {data: people, total: totalNumber };
                     case 'project':
                         const { projects } = data.data;

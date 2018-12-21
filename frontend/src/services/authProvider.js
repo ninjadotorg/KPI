@@ -8,7 +8,7 @@ export default (type, params) => {
     console.log('Login Type:', type);
     if (type === AUTH_LOGIN) {
         const { username, password } = params;
-        localStorage.setItem('username', username);
+        localStorage.setItem(APP.USER_NAME, username);
         
         const url = BASE_API.BASE_URL + API.AUTH;
         console.log('Url:', url);
@@ -28,15 +28,14 @@ export default (type, params) => {
             const { status } = data;
             
             if (status) {
-                const { access_token: accessToken } = data.data;
+                const { access_token: accessToken, avatar="" } = data.data;
                 localStorage.setItem(APP.AUTH_TOKEN, accessToken);
-
+                localStorage.setItem(APP.AVATAR, avatar);
                 return Promise.resolve();
 
             }else {
                 const { message } = data;
-                localStorage.removeItem('username');
-                console.log('Message:', message);
+                localStorage.removeItem(APP.USER_NAME);
                 return Promise.reject(message);
             }
             
@@ -46,15 +45,16 @@ export default (type, params) => {
     }
     // called when the user clicks on the logout button
     if (type === AUTH_LOGOUT) {
-        localStorage.removeItem('username');
+        localStorage.removeItem(APP.USER_NAME);
         localStorage.removeItem(APP.AUTH_TOKEN);
+        localStorage.removeItem(APP.AVATAR);
         return Promise.resolve();
     }
     // called when the API returns an error
     if (type === AUTH_ERROR) {
         const { status } = params;
         if (status === 401 || status === 403) {
-            localStorage.removeItem('username');
+            localStorage.removeItem(APP.USER_NAME);
             return Promise.reject();
         }
         return Promise.resolve();

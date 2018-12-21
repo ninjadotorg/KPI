@@ -1,6 +1,6 @@
 export const BASE_API = {
   BASE_URL:
-    process.env.NODE_ENV === 'production' ? 'https://kpi.autonomous.ai' : '',
+    process.env.NODE_ENV === 'production' ? 'https://kpi.autonomous.ai' : 'http://35.247.16.10:8000',
   TIMEOUT: 10000
 };
 
@@ -10,5 +10,7 @@ export const API = {
 };
 
 export const APP = {
-  AUTH_TOKEN: 'auth_token'
+  AUTH_TOKEN: 'auth_token',
+  AVATAR: 'avatar',
+  USER_NAME: 'username'
 };
