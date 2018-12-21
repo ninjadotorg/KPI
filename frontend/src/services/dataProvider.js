@@ -1,5 +1,4 @@
-import { stringify } from 'query-string';
-import { BASE_API, API} from '../constants';
+import { BASE_API} from '../constants';
 import $http from './api';
 
 import {
@@ -17,7 +16,6 @@ const handlerUrl = (type, resource, params) => {
             break;
         case GET_ONE:
             const { id } = params;
-            console.log('Params:', params);
             url = `${apiUrl}/answer/view?type=${resource}&id=${id}`;
             break;
         default:
@@ -39,13 +37,20 @@ export default (type, resource, params) => {
                 const { filter } = params;
                 console.log('Filter:', filter);
                 const { total } = data.data;
-                const totalNumber = total * perPage;
+                let totalNumber = total * perPage;
                 switch (resource) {
                     case 'people':
                         let { people } = data.data;
-                        const { name } = filter;
-                        if(name){
-                            people = people.filter(item => item.name.toUpperCase().match(name.toUpperCase()));
+                        const { keywords, title } = filter;
+                        if(keywords){
+                            people = people.filter(item => item.keywords.toUpperCase().match(keywords.toUpperCase()));                       
+                        }
+                        if (title){
+                            people = people.filter(item => item.title && item.title.toUpperCase().match(title.toUpperCase()));
+
+                        }
+                        if(keywords || title){
+                            totalNumber = people.length;
                         }
 
                         return {data: people, total: totalNumber };

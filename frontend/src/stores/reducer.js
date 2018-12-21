@@ -8,7 +8,6 @@ const hrReducer = (state = initialState, action) => {
     return produce(state, draft => {
         switch (action.type) {
             case selectPeople().type:
-                console.log('Select People:', action.payload);
                 draft.selectedPeople = action.payload;
                 break;
             default:

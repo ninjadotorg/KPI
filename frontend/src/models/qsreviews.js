@@ -70,8 +70,8 @@ class QuestionReviewItem extends React.Component {
 
 const QuestionReviewGrid = (props) => (
     <Card>
-        <CardHeader title={`Please add rating and comment for ${props.name}`} />
-        <div className="warning">***You only can re-rate and add your feedbacks for each criteria after 30 days so please think carefully.</div>
+        <CardHeader title={`Please rate and give feedback to ${props.name}`} />
+        <div className="warning">***You can re-rate and add your feedback to each criterion after 30 days so please think carefully.</div>
         <List>
             {props.questions.map((item, index)=>
                 <QuestionReviewItem key={item.id} index={index} item={item} onChangeRating={props.onChangeRating}/>

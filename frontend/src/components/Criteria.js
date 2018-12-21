@@ -47,7 +47,6 @@ class Criteria extends Component {
     getQuestionList = (category)=> {
         dataProviderQuestion(GET_LIST, 'question', { category })
         .then(response => {
-            console.log('Question Response:', response);
             this.setState({
                 questions: response.data,
                 checkQuestions: response.data

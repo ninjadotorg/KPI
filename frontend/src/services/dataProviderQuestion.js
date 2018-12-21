@@ -1,5 +1,4 @@
-import { stringify } from 'query-string';
-import { BASE_API, API} from '../constants';
+import { BASE_API } from '../constants';
 import $http from './api';
 
 import {
@@ -12,7 +11,6 @@ const apiUrl = BASE_API.BASE_URL;
 const handlerUrl = (type, resource, params) => {
     let url = '';
     console.log('type:', type);
-    console.log('Params:', params);
     const { category, id } = params;
     switch (type) {
         case GET_LIST:
@@ -24,6 +22,7 @@ const handlerUrl = (type, resource, params) => {
             break;
         case CREATE:
             url = `${apiUrl}/${resource}/submit?type=${category}&id=${id}`;
+            break;
         default:
             break;
     }
@@ -33,7 +32,6 @@ const handlerUrl = (type, resource, params) => {
 
 const handlerPromise = (type, url, params) => {
     let promise = null;
-    console.log('type:', type);
     switch (type) {
         case CREATE:
             const { data } = params;

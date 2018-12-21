@@ -9,7 +9,6 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 import {
     translate,
-    DashboardMenuItem,
     MenuItemLink,
     Responsive,
 } from 'react-admin';

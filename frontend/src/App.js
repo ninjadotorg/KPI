@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Admin, Resource, ShowGuesser } from 'react-admin';
+import React from 'react';
+import { Admin, Resource } from 'react-admin';
 import { UserList } from './models/users';
 import { TeamList } from './models/teams';
 import { CompanyList } from './models/companies';

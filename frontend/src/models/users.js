@@ -7,7 +7,9 @@ import ViewButton from '../modules/ViewButton';
 
 const UserFilter = (props) => (
     <Filter {...props}>
-        <TextInput label="Search" source="name" resettable placeholder="Name" alwaysOn/>
+        <TextInput label="Search" source="keywords" resettable placeholder="Name" alwaysOn/>
+        <TextInput label="Title" source="title" resettable  alwaysOn />
+
     </Filter>
 );
 
