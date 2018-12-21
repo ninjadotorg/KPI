@@ -12,7 +12,12 @@ const handlerUrl = (type, resource, params) => {
     switch (type) {
         case GET_LIST:
             const { page, perPage } = params.pagination;
+            const { filter } = params;
             url = `${apiUrl}/${resource}/list?page=${page-1}&offset=${perPage}`;
+            const { keywords, title } = filter;
+            if(keywords || title){
+                url = `${apiUrl}/${resource}/list?page=${page-1}&offset=1000`;
+            }
             break;
         case GET_ONE:
             const { id } = params;
