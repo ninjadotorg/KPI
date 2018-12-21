@@ -30,17 +30,18 @@ def is_valid_object_id(review_type, object_id):
 	return result
 
 
-def is_answer_question(user_id, review_type, object_id):
+def is_answer_question(user_id, review_type, object_id, question_id):
 	if review_type is None or \
 		object_id is None or \
-		user_id is None:
+		user_id is None or \
+		question_id is None:
 		return False
 
 	rt = db.session.query(ReviewType).filter(ReviewType.name==func.binary(review_type)).first()
 	if rt is None:
 		return False
 
-	result = db.session.query(Rating).filter(and_(Rating.user_id==user_id, Rating.object_id==object_id, Rating.question_id.in_(db.session.query(Question.id).filter(Question.type_id==rt.id)))).first()
+	result = db.session.query(Rating).filter(and_(Rating.user_id==user_id, Rating.object_id==object_id, Rating.question_id==question_id)).first()
 	if result is None:
 		return False
 	else:
