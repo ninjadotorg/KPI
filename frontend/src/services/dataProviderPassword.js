@@ -1,4 +1,4 @@
-import { BASE_API, API} from '../constants';
+import { BASE_API } from '../constants';
 import $http from './api';
 
 import {

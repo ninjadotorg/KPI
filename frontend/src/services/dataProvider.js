@@ -1,5 +1,4 @@
-import { stringify } from 'query-string';
-import { BASE_API, API} from '../constants';
+import { BASE_API} from '../constants';
 import $http from './api';
 
 import {
@@ -17,7 +16,6 @@ const handlerUrl = (type, resource, params) => {
             break;
         case GET_ONE:
             const { id } = params;
-            console.log('Params:', params);
             url = `${apiUrl}/answer/view?type=${resource}&id=${id}`;
             break;
         default:

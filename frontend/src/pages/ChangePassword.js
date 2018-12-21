@@ -10,7 +10,6 @@ import { APP } from '../constants';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
 
 import dataProviderPassword from '../services/dataProviderPassword';
 import './ChangePassword.scss';
@@ -27,7 +26,6 @@ class ChangePassword extends React.Component {
     }
     componentDidMount(){
         const userObject = this.getUser();
-        console.log('UserObject:', userObject);
         this.setState({
             user: userObject
         });
@@ -59,7 +57,6 @@ class ChangePassword extends React.Component {
         });
     }
     validate = (currentPass, newPass) => {
-        console.log('Current Pass:', currentPass, 'New Pass:', newPass);
         if (currentPass === null || currentPass.length === 0 || newPass === null || newPass.length === 0) return false;
         return true;
     }
@@ -69,7 +66,6 @@ class ChangePassword extends React.Component {
         const currentPass = event.target.currentPass.value;
         const newPass = event.target.newPass.value;
         const isValid = this.validate(currentPass, newPass);
-        console.log('Is Valid:', isValid);
 
         if(isValid){
             const params = {
@@ -95,7 +91,6 @@ class ChangePassword extends React.Component {
     }
     renderErrorField = () => {
         const { error } = this.state;
-        console.log('Error:', error);
         if(!error) return null;
         return (
             <div className="errorText">*{error}</div>
@@ -104,7 +99,6 @@ class ChangePassword extends React.Component {
     renderUser = (user) => {
         if(!user) return null;
         const { avatar, email } = user;
-        console.log('avatar:', avatar);
         return (
             <ListItem className="card">
                 <Avatar alt="User" src={avatar || DefaultAvatar} className="avatar" />

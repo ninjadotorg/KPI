@@ -30,10 +30,10 @@ class Detail extends Component {
 
     componentDidMount() {
         const query = getQueryString();
-        console.log('Query:', query);
         if (query.length === 4){
-            const id = query[query.length-1].split('?')[0];
-            const queryId = query[query.length-1].slice(1).replace('?','');
+            const lastQuery = query[query.length-1].split('?');
+            const id = lastQuery[0];
+            const queryId = lastQuery[1];
             const params = qs.parse(queryId);
             const category = query[query.length-2];
             this.setState({

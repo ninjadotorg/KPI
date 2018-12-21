@@ -22,8 +22,9 @@ class WriteReview extends Component {
         const query = getQueryString();
         if (query.length === 4){
             const category = query[query.length-2];
-            const queryId = query[query.length-1].slice(1).replace('?','');
-            const id = query[query.length-1].split('?')[0];
+            const lastQuery = query[query.length-1].split('?');
+            const queryId = lastQuery[1];
+            const id = lastQuery[0];
             const params = qs.parse(queryId);
             this.setState({
                 category,
