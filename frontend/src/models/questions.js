@@ -50,7 +50,7 @@ class QuestionItem extends React.Component {
 
 const QuestionGrid = (props) => (
     <Card className="card">
-        <CardHeader title={`Choose questions to review ${props.name}`} />
+        <CardHeader title={`Please select criteria for assessing ${props.name}`} />
         <List>
             {props.questions.map((item, index)=>
                 <QuestionItem 
