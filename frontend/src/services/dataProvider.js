@@ -39,13 +39,20 @@ export default (type, resource, params) => {
                 const { filter } = params;
                 console.log('Filter:', filter);
                 const { total } = data.data;
-                const totalNumber = total * perPage;
+                let totalNumber = total * perPage;
                 switch (resource) {
                     case 'people':
                         let { people } = data.data;
-                        const { name } = filter;
-                        if(name){
-                            people = people.filter(item => item.name.toUpperCase().match(name.toUpperCase()));
+                        const { keywords, title } = filter;
+                        if(keywords){
+                            people = people.filter(item => item.keywords.toUpperCase().match(keywords.toUpperCase()));                       
+                        }
+                        if (title){
+                            people = people.filter(item => item.title && item.title.toUpperCase().match(title.toUpperCase()));
+
+                        }
+                        if(keywords || title){
+                            totalNumber = people.length;
                         }
 
                         return {data: people, total: totalNumber };
