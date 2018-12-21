@@ -1,6 +1,6 @@
 from flask import Flask, g, redirect, request
 from app.core import db, jwt, sg, configure_app, mail_services, gc_services
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from models import User
 from app.helpers.response import response_error
 from app.routes import init_routes

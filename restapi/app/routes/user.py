@@ -7,6 +7,7 @@ import requests
 
 import app.constants as CONST
 import app.bl.storage as storage_bl
+import app.bl.user as user_bl
 
 from sqlalchemy import func
 from flask import Blueprint, request, g
@@ -17,7 +18,7 @@ from flask_jwt_extended import (create_access_token, jwt_required, get_jwt_ident
 from app.core import gc_services
 from app.models import User, ReviewType, Role
 from app.helpers.utils import is_valid_email, is_valid_password, local_to_utc
-from app.helpers.decorators import both_hr_and_amdin_required
+from app.helpers.decorators import both_hr_and_amdin_required, admin_required
 from app.helpers.message import MESSAGE, CODE
 from app.helpers.response import response_ok, response_error
 
@@ -93,7 +94,7 @@ def sign_up():
 				password=hashlib.md5(password).hexdigest(),
 				type_id=t.id,
 				title=title,
-				avatar='{}{}'.format(CONST.BASE_IMAGE_URL, image_name)
+				avatar='{}{}'.format(CONST.BASE_IMAGE_URL, image_name) if image_name is not None else None
 			)
 			db.session.add(u)
 			db.session.flush()
@@ -218,9 +219,25 @@ def change_password():
 
 		if user.password == current_password:
 			user.password = hashlib.md5(new_password).hexdigest()
+			user.is_need_change_password = 0
+		else:
+			return response_error(MESSAGE.USER_INVALID_PASSWORD, CODE.USER_INVALID_PASSWORD)
 
 		db.session.flush()
 		db.session.commit()
+		return response_ok()
+
+	except Exception, ex:
+		db.session.rollback()
+		return response_error(ex.message)
+
+
+@user_routes.route('/import-user', methods=['GET'])
+@admin_required
+def import_user():
+	try:
+		users = user_bl.read_data()
+		db.session.bulk_save_objects(users)
 		return response_ok()
 
 	except Exception, ex:
