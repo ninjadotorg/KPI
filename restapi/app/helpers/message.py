@@ -108,7 +108,7 @@ class MESSAGE(object):
 	# ANSWER
 	ANSWER_INVALID_INPUT = 'Please check your input'
 	ANSWER_INVALID_QUESTION_ID = 'Please check your question id'
-	ANSWER_QUESTION_ALREADY = 'You has answered question already!'
+	ANSWER_QUESTION_ALREADY = 'You have alrealdy rated these criteria. Please choose other assessment criteria.'
 
 	# QUESTION
 	QUESTION_NOT_EXIST = 'Your input question does not exist!'
