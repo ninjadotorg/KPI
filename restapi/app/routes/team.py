@@ -97,7 +97,7 @@ def crud(team_id):
 				return response_error(MESSAGE.INVALID_DATA, CODE.INVALID_DATA)
 
 			if 'name' in data:
-				r.name = data['name']
+				t.name = data['name']
 				db.session.flush()
 		else:
 			db.session.delete(t)
