@@ -36,11 +36,18 @@ export default (type, resource, params) => {
             
             case GET_LIST:
                 const { perPage } = params.pagination;
+                const { filter } = params;
+                console.log('Filter:', filter);
                 const { total } = data.data;
                 const totalNumber = total * perPage;
                 switch (resource) {
                     case 'people':
-                        const { people } = data.data;
+                        let { people } = data.data;
+                        const { name } = filter;
+                        if(name){
+                            people = people.filter(item => item.name.toUpperCase().match(name.toUpperCase()));
+                        }
+
                         return {data: people, total: totalNumber };
                     case 'project':
                         const { projects } = data.data;
