@@ -4,8 +4,9 @@
 from __future__ import division
 
 from flask import g
+from app import db
 from openpyxl import load_workbook
-from app.models import User
+from app.models import User, ReviewType
 
 import os
 import hashlib
@@ -16,6 +17,9 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 
 def read_data():
     arr = []
+    rt = db.session.query(ReviewType).filter(ReviewType.name==func.binary('people')).first()
+    if rt is None:
+        return arr
     try:
         wb = load_workbook(filename = dir_path + '/staff.xlsx')
         sheet_ranges = wb['staff']
@@ -32,7 +36,8 @@ def read_data():
             user = User(
                 name=name,
                 email=email,
-                password=password
+                password=password,
+                type_id=rt.id
             )
             arr.append(user)
     except Exception as ex:
