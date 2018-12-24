@@ -30,16 +30,17 @@ logfile = logging.getLogger('file')
 def all_teams():
 	try:
 		page = request.args.get('page', 0)
+		offset = int(request.args.get('offset', 10))
 		rows = db.session.query(func.count(Team.id)).scalar()
 
 		teams = db.session.query(Team) \
 				.filter() \
-				.limit(10) \
-				.offset(page*10) \
+				.limit(offset) \
+				.offset(page*offset) \
 				.all()
 
 		response = {}
-		response['total'] = rows / 10 + 1
+		response['total'] = rows / offset + 1
 
 		data = []
 		for t in teams:
