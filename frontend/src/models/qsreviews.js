@@ -72,6 +72,7 @@ const QuestionReviewGrid = (props) => (
     <Card>
         <CardHeader title={`Please rate and give feedback to ${props.name}`} />
         <div className="warning">You only can re-rate and add your feedback to each criterion after 30 days so please think carefully.</div>
+        <div className="warning">You must write at least 300 characters for each criterion.</div>
         <List>
             {props.questions.map((item, index)=>
                 <QuestionReviewItem key={item.id} index={index} item={item} onChangeRating={props.onChangeRating}/>
