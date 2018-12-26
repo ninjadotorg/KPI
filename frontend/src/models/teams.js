@@ -5,7 +5,7 @@ import FeedbackButton from '../modules/FeedbackButton';
 import ViewButton from '../modules/ViewButton';
 
 export const TeamList = props => (
-    <List {...props} bulkActionButtons={false}>
+    <List {...props} bulkActionButtons={false} perPage={25}>
         <Datagrid>
             <TextField source="name" />
             <StarRatingField source="rating" />
