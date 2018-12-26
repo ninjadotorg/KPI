@@ -14,7 +14,7 @@ from flask import g
 def is_valid_email(email):
 	if email is not None:
 		email = email.lower()
-		if re.match("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", email) != None:
+		if re.match("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,6})$", email) != None:
 			return True
 	return False
 
