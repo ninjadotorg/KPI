@@ -62,7 +62,7 @@ class Reviews extends Component {
             this.submitNewReview(params);
         }else {
             this.setState({
-                error:'Please fill all questions'
+                error:'Please fill all criteria and at least 300 characters per criterion.'
             });
         }
         

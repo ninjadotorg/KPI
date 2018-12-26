@@ -51,6 +51,7 @@ class QuestionItem extends React.Component {
 const QuestionGrid = (props) => (
     <Card className="card">
         <CardHeader title={`Please select criteria for assessing ${props.name}`} />
+        <div className="warning">When assessing a criterion, you must give detailed proofs. So think carefully to select criteria that you can give clear assessments.</div>
         <List>
             {props.questions.map((item, index)=>
                 <QuestionItem 

@@ -5,9 +5,8 @@ import FeedbackButton from '../modules/FeedbackButton';
 import ViewButton from '../modules/ViewButton';
 
 export const CompanyList = props => (
-    <List {...props} bulkActionButtons={false}>
+    <List {...props} bulkActionButtons={false} perPage={25}>
         <Datagrid>
-            <TextField source="id" />
             <TextField source="name" />
             <StarRatingField source="rating" />
             <FeedbackButton {...props}/>
