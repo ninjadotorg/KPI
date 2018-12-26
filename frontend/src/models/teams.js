@@ -7,7 +7,6 @@ import ViewButton from '../modules/ViewButton';
 export const TeamList = props => (
     <List {...props} bulkActionButtons={false}>
         <Datagrid>
-            <TextField source="id" />
             <TextField source="name" />
             <StarRatingField source="rating" />
             <FeedbackButton {...props}/>
