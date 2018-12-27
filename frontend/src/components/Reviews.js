@@ -29,7 +29,7 @@ class Reviews extends Component {
             const item = ratings[i];
             const { rating, comment } = item;
             console.log('Comment Length:', comment.length);
-            if(comment.length === 0 || rating === 0 || comment.length < 300){
+            if(comment.length === 0 || rating === 0 || comment.length < 250){
                 return false;
             }
         }
@@ -63,7 +63,7 @@ class Reviews extends Component {
             this.submitNewReview(params);
         }else {
             this.setState({
-                error:'Please fill at least 1 criterion with at least 300 characters.'
+                error:'Please fill at least 1 criterion with at least 250 characters.'
             });
         }
         

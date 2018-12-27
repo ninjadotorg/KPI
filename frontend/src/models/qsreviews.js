@@ -69,11 +69,11 @@ class QuestionReviewItem extends React.Component {
         const { commentLength } = this.state;
         return (
             <div className="wrapperItemComment">
-                <div className="commentLength">Letters length: {commentLength}</div>
+                <div className="commentLength">Letter count: {commentLength}</div>
                 <textarea 
                     className="textField"
                     multiline="true"
-                    placeholder="Please state reasons for rating this by giving detailed proofs."
+                    placeholder="Please give detailed proofs for this rating."
                     onChange={(e)=> this.onChangeComment(e.target.value)} 
                     type='text'/>
             </div>
@@ -100,7 +100,7 @@ const QuestionReviewGrid = (props) => (
     <Card>
         {props.avatar && <div className="wrapperAvatar"><Avatar className="avatar" alt="User" src={props.avatar || DefaultAvatar} /></div>}
         <CardHeader title={`Please rate and give feedback to ${props.name}`} />
-        <div className="warning">Criteria could be rated with detailed proofs of at least 250 characters. If you do not want to rate, leave it blank. <br />Re-rating and adding new feedback are applicable after 30 days from the previous input, so please think carefully. <br />English and Vietnamese are acceptable.</div>
+        <div className="warning">Criteria could be rated with detailed proofs of at least 250 characters. If you do not want to rate, leave it blank. <br />Re-rating and adding new feedback are applicable after 30 days from the previous input, so please think carefully. <br />Both English and Vietnamese are accepted.</div>
         <List>
             {props.questions.map((item, index)=>
                 <QuestionReviewItem key={item.id} index={index} item={item} onChangeRating={props.onChangeRating}/>
