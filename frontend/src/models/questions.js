@@ -6,6 +6,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '../modules/Checkbox';
+import Avatar from '@material-ui/core/Avatar';
+import DefaultAvatar from '../assets/avatar.svg';
 import './questions.scss';
 
 
@@ -50,6 +52,7 @@ class QuestionItem extends React.Component {
 
 const QuestionGrid = (props) => (
     <Card className="card">
+        <div className="wrapperAvatar"><Avatar className="avatar" alt="User" src={props.avatar || DefaultAvatar} /></div>
         <CardHeader title={`Please select criteria for assessing ${props.name}`} />
         <div className="warning">When assessing a criterion, you must give detailed proofs. So think carefully to select criteria that you can give clear assessments.</div>
         <List>

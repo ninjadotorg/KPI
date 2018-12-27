@@ -10,4 +10,39 @@
     color: blue;
     margin-left: 23px;
     margin-bottom: 5px;
+    letter-spacing: 0.5px;
+}
+.textField {
+    margin: (0 20px);
+    width: 500px;
+    height: 150px;
+    border: solid 1px lightgray;
+    border-radius: 5px;
+    padding: (10px, 10px);
+}
+.commentLength {
+    color: lightgray;
+    font-style: italic;
+    font-size: 14px;
+    margin-left: 20px;
+    margin-bottom: 5px;
+}
+.wrapperAvatar {
+    display: flex;
+    justify-content: center;
+    padding: (10px 0);
+    .avatar {
+        width: 100px;
+        height: 100px;
+    }
+}
+.wrapperReviewItem{
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    .reviewRater {
+        margin-left: 15px;
+        margin-bottom: 20px;
+    }
 }

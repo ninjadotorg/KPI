@@ -10,6 +10,7 @@ class Criteria extends Component {
     static propTypes = {
         category: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
+        avatar: PropTypes.string,
         onChoseQuestions: PropTypes.func,
     }
     constructor(props) {
@@ -55,11 +56,12 @@ class Criteria extends Component {
     }
     renderQuestionList = () => {
         const { questions } = this.state;
-        const { name } = this.props;
+        const { name, avatar } = this.props;
         const questionListProps = {
             questions,
             onChangeCheckQuestion: this.handleCheckQuestion,
-            name:name
+            name:name,
+            avatar: avatar
         }
 
         return (

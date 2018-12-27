@@ -9,7 +9,8 @@ class ViewButton extends Component {
     }
     handleClickButton = () => {
         const { basePath, record } = this.props;
-        this.props.history.push(`/detail${basePath}/${record.id}?name=${record.name}`);
+        const encodeAvatar = encodeURIComponent(record.avatar || '');
+        this.props.history.push(`/detail${basePath}/${record.id}?name=${record.name}&avatar=${encodeAvatar}`);
     }
     componentDidMount(){
     }

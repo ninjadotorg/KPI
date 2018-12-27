@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { getQueryString } from '../utils/utils';
 import qs from 'querystring';
 
+import dataProviderQuestion from '../services/dataProviderQuestion';
+import { GET_LIST } from 'react-admin';
+
 import Criteria from '../components/Criteria';
 import Reviews from '../components/Reviews';
 import './WriteReview.scss';
@@ -15,7 +18,8 @@ class WriteReview extends Component {
             questions:[],
             category: null,
             userId: -1,
-            name: ''
+            name: '',
+            avatar: ''
         }
     }
     componentDidMount() {
@@ -26,43 +30,57 @@ class WriteReview extends Component {
             const queryId = lastQuery[1];
             const id = lastQuery[0];
             const params = qs.parse(queryId);
+            console.log('Params:', params);
             this.setState({
                 category,
                 userId: id,
-                name: params.name
-            })
+                name: params.name,
+                avatar: params.avatar
+            });
+            this.getQuestionList(category);
+
         }
 
+    }
+    getQuestionList = (category)=> {
+        dataProviderQuestion(GET_LIST, 'question', { category })
+        .then(response => {
+            this.setState({
+                questions: response.data,
+            })
+        });
     }
     backAction = () => {
         this.props.history.go(-1);
     }
 
     handleCompleteReview = () => {
-        const { category, userId, name } = this.state;
-        const url = `/detail/${category}/${userId}?name=${name}`;
+        const { category, userId, name, avatar } = this.state;
+        const url = `/detail/${category}/${userId}?name=${name}&avatar=${encodeURIComponent(avatar)}`;
         this.props.history.push(url);
     }
 
-    handleCompleteChoseQuestion = (questions) => {
-        this.setState({
-            questions,
-        });
-    }
+    // handleCompleteChoseQuestion = (questions) => {
+    //     this.setState({
+    //         questions,
+    //     });
+    // }
     
-    renderCriteria = () => {
-        const { questions, category, name } = this.state;
-        if (!category) return null;
-        if (questions.length > 0) return null;
-        return (
-            <Criteria 
-            category={category}
-            name={name}
-            onChoseQuestions={this.handleCompleteChoseQuestion}/>
-        );
-    }
+    // renderCriteria = () => {
+    //     const { questions, category, name, avatar } = this.state;
+    //     if (!category) return null;
+    //     if (questions.length > 0) return null;
+    //     console.log('Avatar:', avatar);
+    //     return (
+    //         <Criteria 
+    //         category={category}
+    //         name={name}
+    //         avatar={avatar}
+    //         onChoseQuestions={this.handleCompleteChoseQuestion}/>
+    //     );
+    // }
     renderReviews = () => {
-        const { questions, category, userId, name } = this.state;
+        const { questions, category, userId, name, avatar } = this.state;
         if (questions.length === 0) return null;
 
         return (
@@ -70,6 +88,7 @@ class WriteReview extends Component {
             category={category}
             userId={userId}
             name={name}
+            avatar={avatar}
             questions={questions} 
             onCompleteReview={this.handleCompleteReview}
             />
@@ -80,7 +99,7 @@ class WriteReview extends Component {
         
         return (
             <div className="wrapperReview">
-                {this.renderCriteria()}
+                {/*this.renderCriteria()*/}
                 {this.renderReviews()}
             </div>
 

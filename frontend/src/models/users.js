@@ -19,7 +19,6 @@ export const UserList = props => (
             {<AvatarField source="avatar" title="Avatar" />}
             <TextField source="name" />
             <TextField source="title" />
-            <EmailField source="email" />
             <StarRatingField source="rating" />
             <FeedbackButton {...props}/>
             <ViewButton {...props}/>

@@ -10,7 +10,8 @@ class FeebackButton extends Component {
     }
     handleClickFeeback = () => {
         const { basePath, record } = this.props;
-        this.props.history.push(`/review${basePath}/${record.id}?name=${record.name}`);
+        const encodeAvatar = encodeURIComponent(record.avatar || '');
+        this.props.history.push(`/review${basePath}/${record.id}?name=${record.name}&avatar=${encodeAvatar || ''}`);
     }
     componentDidMount(){
     }

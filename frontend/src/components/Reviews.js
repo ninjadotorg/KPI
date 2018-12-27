@@ -10,6 +10,7 @@ class Reviews extends Component {
         category: PropTypes.string.isRequired,
         userId: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
+        avatar: PropTypes.string,
         questions: PropTypes.array.isRequired,
         onCompleteReview: PropTypes.func
     }
@@ -22,13 +23,13 @@ class Reviews extends Component {
     }
     validate = () =>{
         const { ratings } = this.state;
-        const { questions } = this.props;
         if(ratings.length === 0) return false;
-        if(ratings.length < questions.length) return false;
+        console.log('Ratings:', ratings);
         for (let i = 0; i< ratings.length; i ++){
             const item = ratings[i];
             const { rating, comment } = item;
-            if(comment.length === 0 || rating === 0){
+            console.log('Comment Length:', comment.length);
+            if(comment.length === 0 || rating === 0 || comment.length < 300){
                 return false;
             }
         }
@@ -62,7 +63,7 @@ class Reviews extends Component {
             this.submitNewReview(params);
         }else {
             this.setState({
-                error:'Please fill all criteria and at least 300 characters per criterion.'
+                error:'Please fill at least 1 criterion with at least 300 characters.'
             });
         }
         
@@ -108,12 +109,13 @@ class Reviews extends Component {
         );
     }
     renderQuestionReviews = () => {
-        const { questions, name } = this.props;
+        const { questions, name, avatar } = this.props;
 
         const questionListProps = {
             questions,
             onChangeRating:this.onChangeRating,
-            name: name
+            name: name,
+            avatar: avatar
         }
         return (
             <QuestionReviewList {...questionListProps}/>

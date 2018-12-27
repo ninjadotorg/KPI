@@ -9,6 +9,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Rater from 'react-rater';
 import Button from '@material-ui/core/Button';
 import qs from 'querystring';
+import Avatar from '@material-ui/core/Avatar';
+import DefaultAvatar from '../assets/avatar.svg';
 
 import Comments from '../models/comments';
 import dataProvider from '../services/dataProvider';
@@ -24,7 +26,8 @@ class Detail extends Component {
             ratings:[],
             category: '',
             id: -1,
-            name: ''
+            name: '',
+            avatar: ''
         }
     }
 
@@ -39,7 +42,9 @@ class Detail extends Component {
             this.setState({
                 category,
                 id,
-                name: params.name
+                name: params.name,
+                avatar: params.avatar
+
             })
             this.getDetailData(category, id);
         }
@@ -95,9 +100,10 @@ class Detail extends Component {
         );
     }
     renderRatingList = (ratings)=>{
-        const { name } = this.state;
+        const { name, avatar } = this.state;
         return (
         <Card>
+            {avatar && <div className="wrapperAvatar"><Avatar alt="User" src={avatar || DefaultAvatar} className="avatar" /></div>}
             <CardHeader title={`Reviews of ${name}`} />
             <List>
                 {ratings.map((item, index)=>this.renderRateItem(item, index))}

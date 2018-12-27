@@ -7,9 +7,29 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Rater from 'react-rater';
 import TextField from '@material-ui/core/TextField';
+import Avatar from '@material-ui/core/Avatar';
+import DefaultAvatar from '../assets/avatar.svg';
+
+
 import 'react-rater/lib/react-rater.css'
 import './questions.scss';
 
+const styles = theme => ({
+    container: {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    textField: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit,
+    },
+    dense: {
+      marginTop: 16,
+    },
+    menu: {
+      width: 200,
+    },
+  });
 class QuestionReviewItem extends React.Component {
     static propTypes = {
         item: PropTypes.object.isRequired,
@@ -20,7 +40,8 @@ class QuestionReviewItem extends React.Component {
         super(props);
         this.state = {
             rating: 0,
-            comment:''
+            comment:'',
+            commentLength: 0,
         }
     }
 
@@ -28,7 +49,8 @@ class QuestionReviewItem extends React.Component {
         const { item } = this.props;
         const { rating } = this.state;
         this.setState({
-            comment: value
+            comment: value,
+            commentLength: value.length
         })
         this.props.onChangeRating(item.id, rating, value);
 
@@ -44,13 +66,19 @@ class QuestionReviewItem extends React.Component {
     }
 
     renderPostComments = () => {
+        const { commentLength } = this.state;
         return (
-            <TextField 
-            style={{ marginLeft: '20px', marginRight: '20px', width: '500px' }} 
-            multiline variant="outlined" 
-            placeholder="Please state reasons for rating this by giving detailed proofs."
-            onChange={(e)=> this.onChangeComment(e.target.value)} type='text'/>
-        );
+            <div className="wrapperItemComment">
+                <div className="commentLength">Letters length: {commentLength}</div>
+                <textarea 
+                    className="textField"
+                    multiline="true"
+                    placeholder="Please state reasons for rating this by giving detailed proofs."
+                    onChange={(e)=> this.onChangeComment(e.target.value)} 
+                    type='text'/>
+            </div>
+            );
+            
     }
    
     render(){
@@ -58,11 +86,11 @@ class QuestionReviewItem extends React.Component {
         const { rating } = this.state;
         return (
             <div className="wrapperReviewItem">
-            <ListItem className="card">
                 <ListItemText className="title">{index+1}. {item.name}</ListItemText>
-                <Rater total={5} rating={rating} onRate={this.handleRate}/>
-            </ListItem>
-            {this.renderPostComments()}
+                <div className="reviewRater">
+                    <Rater total={5} rating={rating} onRate={this.handleRate}/>
+                </div>
+                {this.renderPostComments()}
             </div>
         );
     }
@@ -70,9 +98,9 @@ class QuestionReviewItem extends React.Component {
 
 const QuestionReviewGrid = (props) => (
     <Card>
+        {props.avatar && <div className="wrapperAvatar"><Avatar className="avatar" alt="User" src={props.avatar || DefaultAvatar} /></div>}
         <CardHeader title={`Please rate and give feedback to ${props.name}`} />
-        <div className="warning">You only can re-rate and add your feedback to each criterion after 30 days so please think carefully.</div>
-        <div className="warning">You must write at least 300 characters for each criterion.</div>
+        <div className="warning">Criteria could be rated with detailed proofs of at least 250 characters. If you do not want to rate, leave it blank. <br />Re-rating and adding new feedback are applicable after 30 days from the previous input, so please think carefully. <br />English and Vietnamese are acceptable.</div>
         <List>
             {props.questions.map((item, index)=>
                 <QuestionReviewItem key={item.id} index={index} item={item} onChangeRating={props.onChangeRating}/>
