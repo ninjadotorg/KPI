@@ -142,7 +142,7 @@ def update_user(user_id):
 		if len(password) > 0:
 			if is_valid_password(password) == False:
 				return response_error(MESSAGE.USER_INVALID_PASSWORD, CODE.USER_INVALID_PASSWORD)
-			u.password = password
+			u.password = hashlib.md5(password).hexdigest()
 
 		if len(name) > 0:
 			u.name = name
