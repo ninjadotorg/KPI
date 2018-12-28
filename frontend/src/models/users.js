@@ -14,7 +14,11 @@ const UserFilter = (props) => (
 );
 
 export const UserList = props => (
-    <List {...props} bulkActionButtons={false} filters={<UserFilter />} perPage={25}>
+    <List {...props} 
+        bulkActionButtons={false} 
+        filters={<UserFilter />} 
+        perPage={25}
+    >
         <Datagrid>
             {<AvatarField source="avatar" title="Avatar" />}
             <TextField source="name" />
