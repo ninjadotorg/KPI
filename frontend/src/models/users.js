@@ -1,9 +1,10 @@
 import React from 'react';
-import { List, Datagrid, TextField, EmailField, TextInput, Filter } from 'react-admin';
+import { List, Datagrid, TextField, TextInput, Filter, CardActions } from 'react-admin';
 import StarRatingField from '../modules/StarRatingField';
 import FeedbackButton from '../modules/FeedbackButton';
 import AvatarField from '../modules/AvatarField';
 import ViewButton from '../modules/ViewButton';
+
 
 const UserFilter = (props) => (
     <Filter {...props}>
@@ -18,6 +19,7 @@ export const UserList = props => (
         bulkActionButtons={false} 
         filters={<UserFilter />} 
         perPage={25}
+        actions={<CardActions />}
     >
         <Datagrid>
             {<AvatarField source="avatar" title="Avatar" />}

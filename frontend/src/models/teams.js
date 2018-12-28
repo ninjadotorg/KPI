@@ -1,11 +1,15 @@
 import React from 'react';
-import { List, Datagrid, TextField } from 'react-admin';
+import { List, Datagrid, TextField, CardActions } from 'react-admin';
 import StarRatingField from '../modules/StarRatingField';
 import FeedbackButton from '../modules/FeedbackButton';
 import ViewButton from '../modules/ViewButton';
 
 export const TeamList = props => (
-    <List {...props} bulkActionButtons={false} perPage={25}>
+    <List {...props} 
+        bulkActionButtons={false} 
+        perPage={25}
+        actions={<CardActions />}
+    >
         <Datagrid>
             <TextField source="name" />
             <StarRatingField source="rating" />
