@@ -48,7 +48,7 @@ export default (type, resource, params) => {
                         let { people } = data.data;
                         const { keywords, title } = filter;
                         if(keywords){
-                            people = people.filter(item => item.keywords.toUpperCase().match(keywords.toUpperCase()));                       
+                            people = people.filter(item => item.keywords && item.keywords.toUpperCase().match(keywords.toUpperCase()));                       
                         }
                         if (title){
                             people = people.filter(item => item.title && item.title.toUpperCase().match(title.toUpperCase()));
