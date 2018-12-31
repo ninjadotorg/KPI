@@ -34,6 +34,21 @@
             margin-top: -3px;
         }
     }
+    .wrapperAvatar {
+        display: flex;
+        align-items: center;
+    }
+    .wrapperButtonFeedback {
+        text-align: right;
+        margin-top: 10px;
+        margin-right: 10px;
+    }
+    .buttonFeedback {
+        height: 44px;
+        width: 200px;
+        margin-left: 10px;
+
+    }
 }
 .wrapperCommentsList{
     padding: (0 50px);

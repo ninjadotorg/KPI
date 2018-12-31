@@ -11,6 +11,8 @@ import Button from '@material-ui/core/Button';
 import qs from 'querystring';
 import Avatar from '@material-ui/core/Avatar';
 import DefaultAvatar from '../assets/avatar.svg';
+import EditIcon from '@material-ui/icons/Edit';
+import classNames from 'classnames';
 
 import Comments from '../models/comments';
 import dataProvider from '../services/dataProvider';
@@ -18,6 +20,15 @@ import { getQueryString } from '../utils/utils';
 
 import './Detail.scss';
 import './StarRate.scss';
+
+const styles = theme => ({
+    leftIcon: {
+      marginRight: theme.spacing.unit,
+    },
+    iconSmall: {
+      fontSize: 20,
+    },
+  });
 
 class Detail extends Component {
     constructor(props) {
@@ -106,7 +117,12 @@ class Detail extends Component {
         let reviewText = reviewCount > 1 ? 'reviews' : 'review';
         return (
         <Card>
-            {avatar && <div className="wrapperAvatar"><Avatar alt="User" src={avatar || DefaultAvatar} className="avatar" /></div>}
+            {avatar && 
+                <div className="wrapperAvatar">
+                    <Avatar alt="User" src={avatar || DefaultAvatar} className="avatar" />
+                </div>
+            }
+            {this.renderEditButton()}
             <CardHeader title={`Reviews of ${name} (${reviewCount} ${reviewText})`} />
             <List>
                 {ratings.map((item, index)=>this.renderRateItem(item, index))}
@@ -114,6 +130,21 @@ class Detail extends Component {
         </Card>
 
         );        
+    }
+    handleClickFeeback=()=> {
+        const { category, id, avatar, name } = this.state;
+        const encodeAvatar = encodeURIComponent(avatar || '');
+        this.props.history.push(`/review/${category}/${id}?name=${name}&avatar=${encodeAvatar || ''}`);
+    }
+    renderEditButton=()=>{
+        return (
+            <div className="wrapperButtonFeedback">
+            <Button className="buttonFeedback" onClick={this.handleClickFeeback}>
+                <EditIcon className={classNames(styles.leftIcon, styles.iconSmall)} />
+            Feedback
+            </Button>
+            </div>
+        );
     }
     render() {
         const { ratings } = this.state;
