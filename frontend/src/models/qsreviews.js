@@ -3,10 +3,8 @@ import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Rater from 'react-rater';
-import TextField from '@material-ui/core/TextField';
 import Avatar from '@material-ui/core/Avatar';
 import DefaultAvatar from '../assets/avatar.svg';
 
@@ -14,22 +12,6 @@ import DefaultAvatar from '../assets/avatar.svg';
 import 'react-rater/lib/react-rater.css'
 import './questions.scss';
 
-const styles = theme => ({
-    container: {
-      display: 'flex',
-      flexWrap: 'wrap',
-    },
-    textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,
-    },
-    dense: {
-      marginTop: 16,
-    },
-    menu: {
-      width: 200,
-    },
-  });
 class QuestionReviewItem extends React.Component {
     static propTypes = {
         item: PropTypes.object.isRequired,
