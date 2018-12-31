@@ -6,6 +6,7 @@ import json
 import app.constants as CONST
 import logging
 import app.bl.answer as answer_bl
+import app.bl.people as people_bl
 
 from flask import Blueprint, request, g
 from app import db
@@ -74,6 +75,13 @@ def submit_answer():
 
 		else:
 			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)	
+
+		if review_type == CONST.Type['People']:
+			user = User.find_user_by_id(object_id)
+			if user is not None:
+				user.rating_count = people_bl.count_rating_for_object(user, CONST.Type['People'])
+				user.comment_count = people_bl.count_comments_for_object(user, CONST.Type['People'])
+				db.session.flush()
 
 		db.session.commit()
 		return response_ok()
