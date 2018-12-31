@@ -1,7 +1,11 @@
 .wrapperDetail {
-    .wrapperItem {
+    .wrapperDetailItem {
         margin-bottom: 20px;
+        .react-rater {
+            font-size: 2rem;
+        }
     }
+     
     .buttonDetail {
         margin-top: 20px;
         margin-bottom: 20px;
@@ -21,6 +25,14 @@
     .raterNumber {
         margin-left: 5px;
         color: gray;
+        font-size: 18px;
+    }
+    .commentRater {
+        margin-left: 5px;
+        .react-rater {
+            font-size: 1.4rem;
+            margin-top: -3px;
+        }
     }
 }
 .wrapperCommentsList{

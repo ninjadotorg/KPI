@@ -86,7 +86,7 @@ class Detail extends Component {
     renderRateItem=(item, index)=>{
         const { name, average, id, comments }  = item;
         return (
-            <div className="wrapperItem" key={id}>
+            <div className="wrapperDetailItem" key={id}>
                 <ListItem>
                     <ListItemText>{index+1}. {name}</ListItemText>
                     <div className="rater">

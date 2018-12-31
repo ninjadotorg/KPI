@@ -25,7 +25,7 @@ export const UserList = props => (
             <AvatarField source="avatar" title="Avatar" isDetailLink={true} />
             <LinkDetailField source="name" />
             <LinkDetailField source="title" />
-            <StarRatingField source="rating" isDetailLink={true}/>
+            <StarRatingField source="rating_count" isDetailLink={true}/>
             <FeedbackButton {...props}/>
         </Datagrid>
     </List>
