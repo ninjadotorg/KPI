@@ -42,10 +42,29 @@ def all_people():
 		data = []
 		for u in users:
 			tmp = u.to_json()
-			tmp['rating'] = people_bl.count_rating_for_object(u, CONST.Type['People'])
 			data.append(tmp)
 
 		response['people'] = data
 		return response_ok(response)
 	except Exception, ex:
+		return response_error(ex.message)
+
+
+@people_routes.route('/update-counting-number', methods=['GET'])
+@admin_required
+def update_rating_and_comment_count():
+	try:
+		users = db.session.query(User).all()
+		for u in users:
+			rating_count = people_bl.count_rating_for_object(u, CONST.Type['People'])
+			comment_count = people_bl.count_comments_for_object(u, CONST.Type['People'])
+
+			u.comment_count = comment_count
+			u.rating_count = rating_count
+			db.session.flush()
+
+		db.session.commit()
+		return response_ok()
+	except Exception, ex:
+		db.session.rollback()
 		return response_error(ex.message)

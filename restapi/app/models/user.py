@@ -4,7 +4,7 @@ from sqlalchemy import func
 
 class User(BaseModel):
 	__tablename__ = 'user'
-	__json_public__ = ['id', 'email', 'name', 'is_need_change_password', 'title', 'avatar', 'keywords']
+	__json_public__ = ['id', 'email', 'name', 'is_need_change_password', 'title', 'avatar', 'keywords', 'comment_count', 'rating_count']
 
 	email = db.Column(db.String(255))
 	name = db.Column(db.String(255))
@@ -15,6 +15,12 @@ class User(BaseModel):
 	is_need_change_password = db.Column(db.Integer,
 										server_default=str(1),
 										default=1)
+	comment_count = db.Column(db.Integer,
+										server_default=str(0),
+										default=0)
+	rating_count = db.Column(db.Integer,
+										server_default=str(0),
+										default=0)
 	role_id = db.Column('role_id', db.ForeignKey('role.id'))
 	type_id = db.Column('type_id', db.ForeignKey('review_type.id'))
 
