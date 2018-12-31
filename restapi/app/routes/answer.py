@@ -131,6 +131,7 @@ def view_answer():
 				else:
 					cjson['user'] = None
 
+				cjson['point'] = c.rating.point
 				tmp.append(cjson)
 			data['comments'] = tmp
 			rs.append(data)
