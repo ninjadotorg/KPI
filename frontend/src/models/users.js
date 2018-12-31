@@ -1,9 +1,9 @@
 import React from 'react';
-import { List, Datagrid, TextField, TextInput, Filter, CardActions } from 'react-admin';
+import { List, Datagrid, TextInput, Filter } from 'react-admin';
 import StarRatingField from '../modules/StarRatingField';
 import FeedbackButton from '../modules/FeedbackButton';
 import AvatarField from '../modules/AvatarField';
-import ViewButton from '../modules/ViewButton';
+import LinkDetailField from '../modules/LinkDetailField';
 
 
 const UserFilter = (props) => (
@@ -19,15 +19,14 @@ export const UserList = props => (
         bulkActionButtons={false} 
         filters={<UserFilter />} 
         perPage={200}
-        actions={<CardActions />}
+        actions={<div />}
     >
         <Datagrid>
-            {<AvatarField source="avatar" title="Avatar" />}
-            <TextField source="name" />
-            <TextField source="title" />
-            <StarRatingField source="rating" />
+            <AvatarField source="avatar" title="Avatar" isDetailLink={true} />
+            <LinkDetailField source="name" />
+            <LinkDetailField source="title" />
+            <StarRatingField source="rating" isDetailLink={true}/>
             <FeedbackButton {...props}/>
-            <ViewButton {...props}/>
         </Datagrid>
     </List>
 );

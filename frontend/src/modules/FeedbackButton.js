@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
+import EditIcon from '@material-ui/icons/Edit';
+import classNames from 'classnames';
+
 import './FeedbackButton.scss';
 
+const styles = theme => ({
+    leftIcon: {
+      marginRight: theme.spacing.unit,
+    },
+    iconSmall: {
+      fontSize: 20,
+    },
+  });
 class FeebackButton extends Component {
 
     static propTypes = {
@@ -17,7 +28,10 @@ class FeebackButton extends Component {
     }
     render() {
         return (
-            <Button className="buttonFeedback" onClick={this.handleClickFeeback}>Give Feedback</Button>
+            <Button className="buttonFeedback" onClick={this.handleClickFeeback}>
+                <EditIcon className={classNames(styles.leftIcon, styles.iconSmall)} />
+                Feedback
+            </Button>
         );
     }
 }

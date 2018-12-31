@@ -5,7 +5,6 @@ import qs from 'querystring';
 import dataProviderQuestion from '../services/dataProviderQuestion';
 import { GET_LIST } from 'react-admin';
 
-import Criteria from '../components/Criteria';
 import Reviews from '../components/Reviews';
 import './WriteReview.scss';
 import './StarRate.scss';
