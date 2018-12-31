@@ -18,7 +18,7 @@ export const UserList = props => (
     <List {...props} 
         bulkActionButtons={false} 
         filters={<UserFilter />} 
-        perPage={25}
+        perPage={200}
         actions={<CardActions />}
     >
         <Datagrid>
