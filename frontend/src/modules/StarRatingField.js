@@ -9,10 +9,11 @@ class StarRatingField extends Component {
 
     renderRatingField=(props)=> {
         const { record = {}} = props;
+        const reviewText = record.comment_count > 1 ? 'reviews' : 'review';
         return(
             <div className="wrapperStarRatingField">
                 <Rater total={5} rating={record.rating_count} interactive={false}/>    
-                {record.rating_count > 0 && <ListItemText>({record.comment_count} reviews)</ListItemText>}
+                {<ListItemText>({record.comment_count} {reviewText})</ListItemText>}
             </div>
         );
     }

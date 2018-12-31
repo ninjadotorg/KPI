@@ -10,7 +10,7 @@ class Comments extends Component {
         comments: PropTypes.array.isRequired,
     }
     renderCommentItem=(item)=>{
-        const { desc , id, user }  = item;
+        const { desc , id, user, point }  = item;
         let userName = "";
         let avatar = ""
         if(user){ 
@@ -21,10 +21,10 @@ class Comments extends Component {
             <div className="wrapperCommentItem" key={id}>
                 <div className="wrapperUser">
                     <Avatar alt="User" src={avatar || DefaultAvatar} className="avatar" />
-                    <div className="name">{userName}</div>
-                    {/*<div className="commentRater">
-                        <Rater total={5} rating={5} interactive={false}/>
-        </div>*/}
+                    <div className="name">{userName} rated</div>
+                    {<div className="commentRater">
+                        <Rater total={5} rating={point} interactive={false}/>
+                    </div>}
                 </div>
                 <div className="desc">{desc}</div>
 

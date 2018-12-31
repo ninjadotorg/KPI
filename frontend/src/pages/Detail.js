@@ -27,7 +27,8 @@ class Detail extends Component {
             category: '',
             id: -1,
             name: '',
-            avatar: ''
+            avatar: '',
+            reviewCount: 0
         }
     }
 
@@ -56,9 +57,10 @@ class Detail extends Component {
         dataProvider(GET_ONE, category, { id:id })
         .then(response => {
             console.log('Detail Response:', response.data);
-            const { ratings } = response.data;
+            const { ratings, reviewed_object: reviewedObject } = response.data;
             this.setState({
                 ratings,
+                reviewCount: reviewedObject.comment_count
             })
         });
     }
@@ -100,11 +102,12 @@ class Detail extends Component {
         );
     }
     renderRatingList = (ratings)=>{
-        const { name, avatar } = this.state;
+        const { name, avatar, reviewCount } = this.state;
+        let reviewText = reviewCount > 1 ? 'reviews' : 'review';
         return (
         <Card>
             {avatar && <div className="wrapperAvatar"><Avatar alt="User" src={avatar || DefaultAvatar} className="avatar" /></div>}
-            <CardHeader title={`Reviews of ${name}`} />
+            <CardHeader title={`Reviews of ${name} (${reviewCount} ${reviewText})`} />
             <List>
                 {ratings.map((item, index)=>this.renderRateItem(item, index))}
             </List>
