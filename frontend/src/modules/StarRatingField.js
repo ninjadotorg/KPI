@@ -2,14 +2,19 @@ import React, {Component} from 'react';
 import Rater from 'react-rater';
 import { Link } from 'react-admin';
 import { getDetaiLink } from '../utils/utils';
+import ListItemText from '@material-ui/core/ListItemText';
 
 
 class StarRatingField extends Component {
 
     renderRatingField=(props)=> {
         const { record = {}} = props;
+        const reviewText = record.comment_count > 1 ? 'reviews' : 'review';
         return(
-            <Rater total={5} rating={record.rating} interactive={false}/>    
+            <div className="wrapperStarRatingField">
+                <Rater total={5} rating={record.rating_count} interactive={false}/>    
+                {<ListItemText>({record.comment_count} {reviewText})</ListItemText>}
+            </div>
         );
     }
     render(){

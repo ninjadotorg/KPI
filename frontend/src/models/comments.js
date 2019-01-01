@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import DefaultAvatar from '../assets/avatar.svg';
+import Rater from 'react-rater';
 
 class Comments extends Component {
     static propTypes = {
         comments: PropTypes.array.isRequired,
     }
     renderCommentItem=(item)=>{
-        const { desc , id, user }  = item;
+        const { desc , id, user, point }  = item;
         let userName = "";
         let avatar = ""
         if(user){ 
@@ -20,7 +21,11 @@ class Comments extends Component {
             <div className="wrapperCommentItem" key={id}>
                 <div className="wrapperUser">
                     <Avatar alt="User" src={avatar || DefaultAvatar} className="avatar" />
-                    <div className="name">{userName}:</div>
+                    <div className="name">{userName}</div>
+                    <div className="ratedText">rated</div>
+                    {<div className="commentRater">
+                        <Rater total={5} rating={point} interactive={false}/>
+                    </div>}
                 </div>
                 <div className="desc">{desc}</div>
 
