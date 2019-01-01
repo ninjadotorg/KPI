@@ -16,7 +16,7 @@ from sqlalchemy import and_, func
 
 from app.models import Team, ReviewType
 from app.helpers.message import MESSAGE, CODE
-from app.helpers.decorators import both_hr_and_amdin_required
+from app.helpers.decorators import both_hr_and_amdin_required, admin_required
 from app.helpers.response import response_ok, response_error
 from app.constants import Type
 
@@ -45,7 +45,6 @@ def all_teams():
 		data = []
 		for t in teams:
 			tmp = t.to_json()
-			tmp['rating'] = people_bl.count_rating_for_object(t, CONST.Type['Team'])
 			data.append(tmp)
 
 		response['teams'] = data
@@ -102,6 +101,26 @@ def crud(team_id):
 				db.session.flush()
 		else:
 			db.session.delete(t)
+
+		db.session.commit()
+		return response_ok()
+	except Exception, ex:
+		db.session.rollback()
+		return response_error(ex.message)
+
+
+@team_routes.route('/update-counting-number', methods=['GET'])
+@admin_required
+def update_rating_and_comment_count():
+	try:
+		teams = db.session.query(Team).all()
+		for t in teams:
+			rating_count = people_bl.count_rating_for_object(t, CONST.Type['Team'])
+			comment_count = people_bl.count_comments_for_object(t, CONST.Type['Team'])
+
+			t.comment_count = comment_count
+			t.rating_count = rating_count
+			db.session.flush()
 
 		db.session.commit()
 		return response_ok()
