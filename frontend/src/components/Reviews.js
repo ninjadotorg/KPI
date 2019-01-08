@@ -19,6 +19,7 @@ class Reviews extends Component {
         this.state = {
             error:null,
             ratings: [],
+            isLoading: false,
         }
     }
     validate = () =>{
@@ -38,11 +39,14 @@ class Reviews extends Component {
     }
     submitNewReview = (params) => {
         const { category, userId } = this.props;
+        this.setState({
+            isLoading: true
+        });
         dataProviderQuestion(CREATE, 'answer', { category:category, id:userId, data: params })
         .then(response => {
             const { status, message } = response.data;
             console.log('submitNewReview', response);
-
+            
             if (status){
                 this.props.onCompleteReview();
             }else {
@@ -50,24 +54,28 @@ class Reviews extends Component {
                     error:message
                 });
             }
+            this.setState({
+                isLoading: false
+            })
         });
     }
     handlePostReview = ()=> {
-        const { ratings } = this.state;
-        const params = {
-            ratings,
-        }
-        console.log('Params:', params);
-        const isValid = this.validate();
-        if(isValid){
-            this.submitNewReview(params);
-        }else {
-            this.setState({
-                error:'Please fill at least 1 criterion with at least 250 characters.'
-            });
+        const { ratings, isLoading } = this.state;
+        if(!isLoading){
+            const params = {
+                ratings,
+            }
+            console.log('Params:', params);
+            const isValid = this.validate();
+            if(isValid){
+                this.submitNewReview(params);
+            }else {
+                this.setState({
+                    error:'Please fill at least 1 criterion with at least 250 characters.'
+                });
+            }
         }
         
-
     }
 
     onChangeRating = (id, rate, comment) =>{
@@ -104,8 +112,11 @@ class Reviews extends Component {
         )
     }
     renderButtonReview = () => {
+        const { isLoading } = this.state;
+        let buttonText = "Post your reviews";
+        if(isLoading) buttonText = "Loading...";
         return (
-            <Button className="buttonComment" onClick={this.handlePostReview} >Post your reviews</Button>
+            <Button className="buttonComment" onClick={this.handlePostReview} >{buttonText}</Button>
         );
     }
     renderQuestionReviews = () => {
@@ -121,6 +132,7 @@ class Reviews extends Component {
             <QuestionReviewList {...questionListProps}/>
         );
     }
+ 
     render(){
         return (
             <div className="wrapperReview">

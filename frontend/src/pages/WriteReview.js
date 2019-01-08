@@ -59,25 +59,6 @@ class WriteReview extends Component {
         this.props.history.push(url);
     }
 
-    // handleCompleteChoseQuestion = (questions) => {
-    //     this.setState({
-    //         questions,
-    //     });
-    // }
-    
-    // renderCriteria = () => {
-    //     const { questions, category, name, avatar } = this.state;
-    //     if (!category) return null;
-    //     if (questions.length > 0) return null;
-    //     console.log('Avatar:', avatar);
-    //     return (
-    //         <Criteria 
-    //         category={category}
-    //         name={name}
-    //         avatar={avatar}
-    //         onChoseQuestions={this.handleCompleteChoseQuestion}/>
-    //     );
-    // }
     renderReviews = () => {
         const { questions, category, userId, name, avatar } = this.state;
         if (questions.length === 0) return null;
