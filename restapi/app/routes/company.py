@@ -16,7 +16,7 @@ from sqlalchemy import and_
 
 from app.models import Company, ReviewType
 from app.helpers.message import MESSAGE, CODE
-from app.helpers.decorators import both_hr_and_amdin_required
+from app.helpers.decorators import both_hr_and_amdin_required, admin_required
 from app.helpers.response import response_ok, response_error
 from app.constants import Type
 
@@ -33,7 +33,6 @@ def all_companies():
 		response = []
 		for c in cs:
 			tmp = c.to_json()
-			tmp['rating'] = people_bl.count_rating_for_object(c, CONST.Type['Company'])
 			response.append(tmp)
 			
 		return response_ok(response)
@@ -90,6 +89,26 @@ def crud(company_id):
 
 		else:
 			db.session.delete(company)
+
+		db.session.commit()
+		return response_ok()
+	except Exception, ex:
+		db.session.rollback()
+		return response_error(ex.message)
+
+
+@company_routes.route('/update-counting-number', methods=['GET'])
+@admin_required
+def update_rating_and_comment_count():
+	try:
+		companies = db.session.query(Company).all()
+		for c in companies:
+			rating_count = people_bl.count_rating_for_object(c, CONST.Type['Company'])
+			comment_count = people_bl.count_comments_for_object(c, CONST.Type['Company'])
+
+			c.comment_count = comment_count
+			c.rating_count = rating_count
+			db.session.flush()
 
 		db.session.commit()
 		return response_ok()

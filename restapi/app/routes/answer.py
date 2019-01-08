@@ -13,7 +13,7 @@ from app import db
 from datetime import datetime
 from sqlalchemy import and_, func
 
-from app.models import Rating, Comment, User, ReviewType, Question
+from app.models import Rating, Comment, User, ReviewType, Question, Team, Company
 from app.helpers.message import MESSAGE, CODE
 from app.helpers.decorators import admin_required
 from app.helpers.response import response_ok, response_error
@@ -81,6 +81,20 @@ def submit_answer():
 			if user is not None:
 				user.rating_count = people_bl.count_rating_for_object(user, CONST.Type['People'])
 				user.comment_count = people_bl.count_comments_for_object(user, CONST.Type['People'])
+				db.session.flush()
+
+		elif review_type == CONST.Type['Team']:
+			team = Team.find_team_by_id(object_id)
+			if team is not None:
+				team.rating_count = people_bl.count_rating_for_object(team, CONST.Type['Team'])
+				team.comment_count = people_bl.count_comments_for_object(team, CONST.Type['Team'])
+				db.session.flush()
+
+		elif review_type == CONST.Type['Company']:
+			company = Company.find_company_by_id(object_id)
+			if company is not None:
+				company.rating_count = people_bl.count_rating_for_object(company, CONST.Type['Company'])
+				company.comment_count = people_bl.count_comments_for_object(company, CONST.Type['Company'])
 				db.session.flush()
 
 		db.session.commit()
