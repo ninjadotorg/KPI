@@ -20,8 +20,8 @@ class Comments extends Component {
         return (
             <div className="wrapperCommentItem" key={id}>
                 <div className="wrapperUser">
-                    <Avatar alt="User" src={avatar || DefaultAvatar} className="avatar" />
-                    <div className="name">{userName}</div>
+                    <Avatar alt="User" src={DefaultAvatar} className="avatar" />
+                    {/*<div className="name">{userName}</div>*/}
                     <div className="ratedText">rated</div>
                     {<div className="commentRater">
                         <Rater total={5} rating={point} interactive={false}/>
