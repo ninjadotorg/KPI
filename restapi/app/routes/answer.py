@@ -140,11 +140,7 @@ def view_answer():
 			tmp = []
 			for c in comments:
 				cjson = c.to_json()
-				if c.rating.user is not None:
-					cjson['user'] = c.rating.user.to_json()
-				else:
-					cjson['user'] = None
-
+				cjson['user'] = None
 				cjson['point'] = c.rating.point
 				tmp.append(cjson)
 			data['comments'] = tmp
@@ -198,11 +194,8 @@ def view_detail():
 		tmp = []
 		for c in comments:
 			cjson = c.to_json()
-			if c.rating.user is not None:
-				cjson['user'] = c.rating.user.to_json()
-			else:
-				cjson['user'] = None
-
+			cjson['user'] = None
+			cjson['point'] = c.rating.point
 			tmp.append(cjson)
 			
 		data['comments'] = tmp
