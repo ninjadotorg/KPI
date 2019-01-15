@@ -108,6 +108,11 @@ def submit_answer():
 @jwt_required
 def view_answer():
 	try:
+		current_user = get_jwt_identity()
+		user = db.session.query(User).filter(User.email==func.binary(current_user)).first()
+		if user is None:
+			return response_error(MESSAGE.USER_INVALID_EMAIL, CODE.USER_INVALID_EMAIL)
+
 		review_type = request.args.get('type', '')
 		object_id = request.args.get('id', -1)
 		
@@ -140,7 +145,14 @@ def view_answer():
 			tmp = []
 			for c in comments:
 				cjson = c.to_json()
-				cjson['user'] = None
+				if c.rating.user is not None:
+					if user.role_id == 1:
+						cjson['user'] = c.rating.user.to_json()	
+					else:
+						cjson['user'] = None
+				else:	
+					cjson['user'] = None
+
 				cjson['point'] = c.rating.point
 				tmp.append(cjson)
 			data['comments'] = tmp
@@ -162,6 +174,11 @@ def view_detail():
 	"	view all ratings and comments of user with question id
 	"""
 	try:
+		current_user = get_jwt_identity()
+		user = db.session.query(User).filter(User.email==func.binary(current_user)).first()
+		if user is None:
+			return response_error(MESSAGE.USER_INVALID_EMAIL, CODE.USER_INVALID_EMAIL)
+
 		review_type = request.args.get('type', '')
 		question_id = request.args.get('question_id', -1)
 		object_id = request.args.get('id', -1)
@@ -194,7 +211,13 @@ def view_detail():
 		tmp = []
 		for c in comments:
 			cjson = c.to_json()
-			cjson['user'] = None
+			if c.rating.user is not None:
+				if user.role_id == 1:
+					cjson['user'] = c.rating.user.to_json()	
+				else:
+					cjson['user'] = None
+			else:
+				cjson['user'] = None
 			cjson['point'] = c.rating.point
 			tmp.append(cjson)
 			
