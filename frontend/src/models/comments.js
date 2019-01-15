@@ -5,6 +5,9 @@ import List from '@material-ui/core/List';
 import DefaultAvatar from '../assets/avatar.svg';
 import Rater from 'react-rater';
 import Button from '@material-ui/core/Button';
+import UpVote from './upvote';
+import DownVote from './downvote';
+import "./comments.scss";
 
 
 class CommentItem extends Component {
@@ -16,7 +19,6 @@ class CommentItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isShowReplyArea: false,
             replyComment: '',
             error: null
         }
@@ -27,8 +29,6 @@ class CommentItem extends Component {
 
     }
     handleOnReplyComment = () => {
-        const { isShowReplyArea } = this.state;
-        this.setState({isShowReplyArea: !isShowReplyArea})
     }
     validate = () => {
         const { replyComment } = this.state;
@@ -51,8 +51,6 @@ class CommentItem extends Component {
     }
 
     renderReplyComment = () => {
-        const { isShowReplyArea } = this.state;
-        if (!isShowReplyArea) return null;
         return (
             <div className="wrapperReplyComment">
                 <textarea 
@@ -62,8 +60,8 @@ class CommentItem extends Component {
                         onChange={(e)=> this.onChangeComment(e.target.value)} 
                         type='text'/>
                 {this.renderError()}
-                <div>
-                    <Button className="buttonSubmitReplyComment" onClick={this.submitReplyComment}>Submit</Button>
+                <div className="wrapperReplySubmitBtn">
+                    <Button variant="contained" color="primary" className="buttonSubmitReplyComment" onClick={this.submitReplyComment}>Submit</Button>
                 </div>
 
             </div>
@@ -72,10 +70,27 @@ class CommentItem extends Component {
     renderReplyButton = () => {
 
     }
+    renderLike = () => {
+        return (
+            <UpVote />
+        );
+    }
+    renderDisLike = () => {
+        return (
+            <DownVote />
+        );
+    }
+    renderLikeDislike = () => {
+        return (
+            <div className="wrapperLikeDislikeArea">
+                {this.renderLike()}
+                {this.renderDisLike()}
+            </div>
+        );
+    }
 
     renderCommentItem=(item)=>{
         const { desc , id, user, point }  = item;
-        const { isShowReplyArea } = this.state;
         let userName = "";
         let avatar = ""
         if(user){ 
@@ -84,18 +99,17 @@ class CommentItem extends Component {
         }
         return (
             <div className="wrapperCommentItem" key={id}>
-                <div className="wrapperUser">
-                    <Avatar alt="User" src={DefaultAvatar} className="avatar" />
-                    {/*<div className="name">{userName}</div>*/}
-                    <div className="ratedText">rated</div>
-                    {<div className="commentRater">
-                        <Rater total={5} rating={point} interactive={false}/>
-                    </div>}
+                    <div className="wrapperUser">
+                        <Avatar alt="User" src={DefaultAvatar} className="avatar" />
+                        {/*<div className="name">{userName}</div>*/}
+                        <div className="ratedText">rated</div>
+                        {<div className="commentRater">
+                            <Rater total={5} rating={point} interactive={false}/>
+                        </div>}
+                    </div>
+                    <div className="desc">{desc}
                 </div>
-                <div className="desc">{desc}
-                </div>
-                <Button className="buttonReplyComment" onClick={this.handleOnReplyComment}>{isShowReplyArea? "Hide" : "Reply"}</Button>
-
+                {this.renderLikeDislike()}
                 {this.renderReplyComment()}
             </div>
         );
