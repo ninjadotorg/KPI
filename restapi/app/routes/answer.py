@@ -150,7 +150,7 @@ def view_answer():
 						cjson['user'] = c.rating.user.to_json()	
 					else:
 						ujson = {
-							'name': hashlib.md5('{}{}'.format(c.rating.user.email, g.PASSPHASE)).hexdigest()[:6]
+							'name': hashlib.md5('{}{}{}'.format(c.rating.user.email, g.PASSPHASE, object_id)).hexdigest()[:6]
 						}
 						cjson['user'] = ujson
 				else:	
@@ -219,7 +219,7 @@ def view_detail():
 					cjson['user'] = c.rating.user.to_json()	
 				else:
 					ujson = {
-						'name': hashlib.md5('{}{}'.format(c.rating.user.email, g.PASSPHASE)).hexdigest()[:6]
+						'name': hashlib.md5('{}{}{}'.format(c.rating.user.email, g.PASSPHASE, object_id)).hexdigest()[:6]
 					}
 					cjson['user'] = ujson
 			else:
@@ -244,23 +244,19 @@ def delete_answer():
 		if comment_id == -1:
 			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
 
-		logfile.debug("DEBUG 0")
 		review = answer_bl.review_type(comment_id)
 		if review is None:
 			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
 
-		logfile.debug("DEBUG 1")
 		comment = db.session.query(Comment).filter(Comment.id==comment_id).first()
 		rating = db.session.query(Rating).filter(Rating.id.in_(db.session.query(Comment.rating_id).filter(Comment.id==comment_id))).first()
 
 		db.session.delete(comment)
 		db.session.delete(rating)
-		logfile.debug("DEBUG 2")
 	
 		object_id = rating.object_id
 		review_type = review.name
 		if review_type == CONST.Type['People']:
-			logfile.debug("DEBUG 3")
 			user = User.find_user_by_id(object_id)
 			if user is not None:
 				user.rating_count = people_bl.count_rating_for_object(user, CONST.Type['People'])
@@ -268,7 +264,6 @@ def delete_answer():
 				db.session.flush()
 
 		elif review_type == CONST.Type['Team']:
-			logfile.debug("DEBUG 4")
 			team = Team.find_team_by_id(object_id)
 			if team is not None:
 				team.rating_count = people_bl.count_rating_for_object(team, CONST.Type['Team'])
@@ -276,7 +271,6 @@ def delete_answer():
 				db.session.flush()
 
 		elif review_type == CONST.Type['Company']:
-			logfile.debug("DEBUG 5")
 			company = Company.find_company_by_id(object_id)
 			if company is not None:
 				company.rating_count = people_bl.count_rating_for_object(company, CONST.Type['Company'])
