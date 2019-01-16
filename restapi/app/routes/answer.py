@@ -149,7 +149,10 @@ def view_answer():
 					if user.role_id == 1:
 						cjson['user'] = c.rating.user.to_json()	
 					else:
-						cjson['user'] = None
+						ujson = {
+							'name': hashlib.md5('{}{}'.format(c.rating.user.email, g.PASSPHASE)).hexdigest()[:6]
+						}
+						cjson['user'] = ujson
 				else:	
 					cjson['user'] = None
 
@@ -215,7 +218,10 @@ def view_detail():
 				if user.role_id == 1:
 					cjson['user'] = c.rating.user.to_json()	
 				else:
-					cjson['user'] = None
+					ujson = {
+						'name': hashlib.md5('{}{}'.format(c.rating.user.email, g.PASSPHASE)).hexdigest()[:6]
+					}
+					cjson['user'] = ujson
 			else:
 				cjson['user'] = None
 			cjson['point'] = c.rating.point
@@ -227,4 +233,52 @@ def view_detail():
 
 		return response_ok(response)
 	except Exception, ex:
+		return response_error(ex.message)
+
+
+@answer_routes.route('/delete-answer', methods=['DELETE'])
+@admin_required
+def delete_answer():
+	try:
+		comment_id = request.args.get('id', -1)
+		if comment_id == -1:
+			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
+
+		review = answer_bl.review_type(comment_id)
+		if review is None:
+			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
+
+		comment = db.session.query(Comment).filter(Comment.id==comment_id).first()
+		rating = db.session.query(Rating).filter(Rating.id.in_(db.session.query(Comment.rating_id).filter(Comment.id==comment_id))).first()
+
+		db.session.delete(comment)
+		db.session.delete(rating)
+	
+		object_id = rating.object_id
+		review_type = review.name
+		if review_type == CONST.Type['People']:
+			user = User.find_user_by_id(object_id)
+			if user is not None:
+				user.rating_count = people_bl.count_rating_for_object(user, CONST.Type['People'])
+				user.comment_count = people_bl.count_comments_for_object(user, CONST.Type['People'])
+				db.session.flush()
+
+		elif review_type == CONST.Type['Team']:
+			team = Team.find_team_by_id(object_id)
+			if team is not None:
+				team.rating_count = people_bl.count_rating_for_object(team, CONST.Type['Team'])
+				team.comment_count = people_bl.count_comments_for_object(team, CONST.Type['Team'])
+				db.session.flush()
+
+		elif review_type == CONST.Type['Company']:
+			company = Company.find_company_by_id(object_id)
+			if company is not None:
+				company.rating_count = people_bl.count_rating_for_object(company, CONST.Type['Company'])
+				company.comment_count = people_bl.count_comments_for_object(company, CONST.Type['Company'])
+				db.session.flush()
+
+		db.session.commit()
+		return response_ok()
+	except Exception, ex:
+		db.session.rollback()
 		return response_error(ex.message)

@@ -4,7 +4,7 @@ from app import db
 from sqlalchemy import func, and_
 from datetime import datetime
 
-from app.models import ReviewType, User, Team, Company, Rating, Question
+from app.models import ReviewType, User, Team, Company, Rating, Question, Comment
 from app.constants import Type
 from app.helpers.utils import utc_to_local
 
@@ -51,3 +51,8 @@ def is_answer_question(user_id, review_type, object_id, question_id):
 			return False
 
 	return True
+
+
+def review_type(comment_id):
+	review_type = db.session.query(ReviewType).filter(ReviewType.id.in_(db.session.query(Question.type_id).filter(Question.id.in_(db.session.query(Rating.question_id).filter(Rating.id.in_(db.session.query(Comment.rating_id).filter(Comment.id==comment_id))))))).first()
+	return review_type

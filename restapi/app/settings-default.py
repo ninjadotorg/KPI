@@ -7,6 +7,7 @@ class BaseConfig(object):
 	BASE_URL = ''
 	BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 	UPLOAD_DIR = os.path.join(BASE_DIR, 'files', 'temp')
+	PASSPHASE = ''
 
 	# SQLALCHEMY
 	SQLALCHEMY_COMMIT_ON_TEARDOWN = True
