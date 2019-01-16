@@ -7,6 +7,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Rater from 'react-rater';
 import Avatar from '@material-ui/core/Avatar';
 import DefaultAvatar from '../assets/avatar.svg';
+import IconButton from '@material-ui/core/IconButton';
+import ClearIcon from '@material-ui/icons/Close';
 
 
 import 'react-rater/lib/react-rater.css'
@@ -46,18 +48,29 @@ class QuestionReviewItem extends React.Component {
         this.props.onChangeRating(item.id, rating, comment);
 
     }
+    handleReset = () => {
+        const { item } = this.props;
+        const comment = '';
+        const rating = 0;
+        this.handleRate( {rating});
+        this.setState({ comment })
+        this.props.onChangeRating(item.id, rating, comment);
+
+    }
 
     renderPostComments = () => {
-        const { commentLength } = this.state;
+        const { commentLength, comment } = this.state;
         return (
             <div className="wrapperItemComment">
                 <div className="commentLength">Letter count: {commentLength}</div>
                 <textarea 
                     className="textField"
                     multiline="true"
+                    value = {comment}
                     placeholder="Please give detailed proofs for this rating."
                     onChange={(e)=> this.onChangeComment(e.target.value)} 
                     type='text'/>
+
             </div>
             );
             
@@ -68,9 +81,15 @@ class QuestionReviewItem extends React.Component {
         const { rating } = this.state;
         return (
             <div className="wrapperReviewItem">
-                <ListItemText className="title">{index+1}. {item.name}</ListItemText>
+                <ListItemText className="title">{index+1}. {item.name}
+                    <IconButton aria-label="Delete" onClick={this.handleReset}>
+                        <ClearIcon fontSize="small" />
+                    </IconButton>
+                </ListItemText>
+                
                 <div className="reviewRater">
                     <Rater total={5} rating={rating} onRate={this.handleRate}/>
+                    
                 </div>
                 {this.renderPostComments()}
             </div>
