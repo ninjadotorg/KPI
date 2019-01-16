@@ -104,7 +104,7 @@ class Detail extends Component {
                     <ListItemText>{index+1}. {name}</ListItemText>
                     <div className="rater">
                         <Rater total={5} rating={average} interactive={false}/>
-                        <div className="raterNumber">({average})</div>
+                        <div className="raterNumber">({average.toFixed(1)})</div>
                     </div>
                 </ListItem>
                 <Comments comments={comments} />
