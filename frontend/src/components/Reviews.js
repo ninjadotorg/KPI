@@ -97,7 +97,7 @@ class Reviews extends Component {
         }
 
         this.setState({
-            ratings: ratings.filter(n=>n)
+            ratings: ratings.filter((item) => item.rating > 0 && item.comment.length > 0)
         })
     }
 
