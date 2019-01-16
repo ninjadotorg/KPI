@@ -244,6 +244,7 @@ def delete_answer():
 		if comment_id == -1:
 			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
 
+		logfile.debug("DEBUG 0")
 		review = answer_bl.review_type(comment_id)
 		if review is None:
 			return response_error(MESSAGE.ANSWER_INVALID_INPUT, CODE.ANSWER_INVALID_INPUT)
