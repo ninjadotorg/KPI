@@ -29,7 +29,7 @@ MarkupSafe==1.0
 mock==2.0.0
 MySQL-python==1.2.5
 pbr==3.1.1
-Pillow==5.0.0
+Pillow==6.2.0
 pluggy==0.6.0
 py==1.5.2
 pycparser==2.18
